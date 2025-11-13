@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-t-primary: #1A1A1F;
+  --color-t-secondary: #5F5F62;
+  --color-accent-main: #16d375;
+  --color-accent-secondary: #1A1A1F;
+  --color-bg-main: #fff;
+  --color-bg-secondary: #f4f3ef;
+  --color-bg-tetriary: #292524;
+
+  --font-main: Unbounded, sans-serif;
+  --font-secondary: Poppins, sans-serif;
+
+  --text-h1: 2.5rem;
+  --text-h1-mobile: 2rem;
+  --text-h2: 1.8rem;
+  --text-h2-mobile: 1.5rem;
+  --text-h3: 1.5rem;
+  --text-h4: 1.2rem;
+  --text-p: 1rem;
+}
+
+* {
+  @apply font-secondary text-p text-t-secondary box-border
+}
+.layout-wrapper {
+  @apply w-[1200px] max-w-full px-5 m-auto
+}
+html { @apply scroll-smooth }
+body { @apply bg-bg-main }
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-main text-h1 text-t-primary;
+}
+h1 + p {
+  @apply mt-3.5
+}
+h1 {
+  @apply sm:text-h1 text-h1-mobile
+}
+h2 {
+  @apply sm:text-h2 text-h2-mobile
+}
+h3 {
+  @apply text-h3
+}
+h4 {
+  @apply text-h4
+}
+p {
+  @apply text-t-secondary max-w-[600px];
+}
+
+
+.brand-btn {
+  @apply bg-accent-main rounded-[.5em] text-neutral-800 font-main font-medium cursor-pointer transition text-center
+  border-2 border-accent-main outline-3 outline-offset-1 outline-transparent
+
+  hover:outline-blue-500 hover:border-bg-main
+}
+.secondary-btn {
+  @apply bg-white/5 font-main rounded-[.5em] w-fit border-2 border-[#B7B7B7] text-neutral-300 text-center
+  cursor-pointer transition
+  
+  hover:bg-white/10 active:bg-white/15
+}
+
+.gradient-heading-on-dark {
+  background: linear-gradient(30deg, #fff, 20%, var(--color-brand-on-light), 40%, var(--color-brand-on-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  font-size: inherit;
+}
+.gradient-heading-on-light {
+  background: linear-gradient(30deg, #16d375, 20%, var(--color-brand-on-light), 40%, var(--color-brand-on-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  font-size: inherit;
+}
