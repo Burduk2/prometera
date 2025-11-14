@@ -397,15 +397,14 @@
 </section>
 
 <section class="layout-wrapper pt-30">
-  <h1 class="sect-title">🚀 Full Dataset Launching November 2025</h1>
+  <h1 class="sect-title">🚀 Full Dataset Launching November 25, 2025</h1>
   <p class="mb-10">
-    Our complete UK Brands dataset, with verified contacts, website stats, and social insights, will be released 
-    <span class="gradient-heading font-medium">
-      in {Math.ceil((new Date('2025-11-25') - new Date()) / 1000 / 60 / 60 / 24)} days.
-    </span>
+    Get early access to the complete UK Brands dataset — verified contacts, website stats, and social insights.
   </p>
   <div class="max-w-[500px]">
-    <EmailForm uid="subscribe" title="Subscribe to not miss out on the launch ↓"
+    <EmailForm uid="subscribe" 
+    text="⏳ Only {Math.ceil((new Date('2025-11-25') - new Date()) / 1000 / 60 / 60 / 24)} days left! 
+    Subscribe now to secure your early access and stay ahead of competitors."
       cta="Subscribe" {emailFormMessage} on:submitAction={submitEmailForm}
     />
   </div>
