@@ -401,12 +401,15 @@
   <p class="mb-10">
     Get early access to the complete UK Brands dataset — verified contacts, website stats, and social insights.
   </p>
-  <div class="max-w-[500px]">
-    <EmailForm uid="subscribe" 
-    text="⏳ Only {Math.ceil((new Date('2025-11-25') - new Date()) / 1000 / 60 / 60 / 24)} days left! 
-    Subscribe now to secure your early access and stay ahead of competitors."
-      cta="Subscribe" {emailFormMessage} on:submitAction={submitEmailForm}
-    />
+  <div class="max-w-[450px]">
+    <p class="font-medium text-t-primary!">
+      ⏳ Only 
+      <span class="gradient-text">
+        {Math.ceil((new Date('2025-11-25') - new Date()) / 1000 / 60 / 60 / 24)} days left! 
+      </span>
+      Subscribe now to secure your early access and stay ahead of competitors.
+    </p>
+    <EmailForm uid="subscribe" cta="Subscribe" {emailFormMessage} on:submitAction={submitEmailForm} />
   </div>
 </section>
 

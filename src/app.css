@@ -67,8 +67,8 @@ p {
   hover:bg-white/10 active:bg-white/15
 }
 
-.gradient-heading {
-  background: linear-gradient(30deg, #16d375, 40%, var(--color-accent-main));
+.gradient-text {
+  background: linear-gradient(30deg, #13c56c, 40%, #10d371);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
