@@ -153,10 +153,10 @@
     }
   ];
   const pieChartOptions = {
-    responsive: true,
+    responsive: false,
     plugins: {
       legend: {
-        position: 'left',
+        position: 'right',
         labels: {
           font: { size: 12, weight: 'normal' },
           color: '#374151'
@@ -242,7 +242,7 @@
 </div>
 <div class="layout-wrapper sm:mt-[120px]! mt-20! relative results-sect">
   <h1>Leads curated specifically for marketing agencies</h1>
-  <div class="flex items-center flex-wrap gap-y-10 mt-12">
+  <div class="flex items-center gap-y-10 mt-12 flex-wrap">
     <div class="flex gap-3 flex-wrap max-w-[600px]">
       {#each [
         { 
@@ -277,7 +277,7 @@
         </div>
       {/each}
     </div>
-    <div class="flex-1">
+    <div class="w-[540px] max-w-full">
       <p class="rounded-xl bg-bg-main/80 mb-7" style="box-shadow: 0 0 20px 10px #fff">
         All leads are carefully filtered to include UK clothing brands with a marketing budget, actively seeking to improve ad performance, social engagement, or online sales. Each lead is manually verified by our team, refreshed monthly, and fully actionable — no spam, no irrelevant contacts. Over 100 verified leads are included, ready for immediate outreach.
       </p>
@@ -298,8 +298,10 @@
     <div class="flex flex-wrap gap-5">
       {#each charts as chart}
         <div class="border rounded-lg p-5 border-neutral-300 w-[370px] not-sm:w-full">
-          <p class="text-lg font-medium mb-2">{chart.title}</p>
-          <canvas bind:this={chart.chart}></canvas>
+          <p class="font-medium mb-2">{chart.title}</p>
+          <div class="my-[-15%]">
+            <canvas width="300" bind:this={chart.chart}></canvas>
+          </div>
         </div>
       {/each}
     </div>
