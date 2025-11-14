@@ -4,6 +4,7 @@ export const NAME = 'Prometera';
 export const EMAIL = 'info@prometera.com';
 export const DOMAIN = 'prometera.com';
 export const GSHEETS = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?usp=sharing';
+export const DOWNLOAD_URL = '/files/uk_clothing_brands_sample.zip';
 
 export function inView(node, { onEnter, threshold = 0.3 } = {}) {
   const observer = new IntersectionObserver(

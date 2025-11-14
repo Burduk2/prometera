@@ -67,16 +67,8 @@ p {
   hover:bg-white/10 active:bg-white/15
 }
 
-.gradient-heading-on-dark {
-  background: linear-gradient(30deg, #fff, 20%, var(--color-brand-on-light), 40%, var(--color-brand-on-dark));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-  font-size: inherit;
-}
-.gradient-heading-on-light {
-  background: linear-gradient(30deg, #16d375, 20%, var(--color-brand-on-light), 40%, var(--color-brand-on-dark));
+.gradient-heading {
+  background: linear-gradient(30deg, #16d375, 40%, var(--color-accent-main));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

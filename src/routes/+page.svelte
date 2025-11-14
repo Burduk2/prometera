@@ -3,7 +3,7 @@
   import { fade, fly } from 'svelte/transition';
   import Marquee from "svelte-fast-marquee";
   import Chart from 'chart.js/auto';
-  import { NAME, EMAIL, DOMAIN, TITLE, DESC, inView, GSHEETS } from '$lib/index.js';
+  import { NAME, EMAIL, DOMAIN, TITLE, DESC, inView, GSHEETS, DOWNLOAD_URL } from '$lib/index.js';
   
   import logoImg from '$lib/assets/logo-nobg-500.png';
   import line1Img from '$lib/assets/vector-line1.svg';
@@ -13,6 +13,7 @@
   import Footer from '$lib/components/Footer.svelte';
 	import { data as previewData, schema as previewSchema, groups as previewGroups, data } from '$lib/assets/datasets/uk-brands/preview.js';
   import Tooltip from '$lib/components/Tooltip.svelte';
+  import EmailForm from '$lib/components/EmailForm.svelte';
 
   let startTime = Date.now();
   let timeOnPage = 0;
@@ -39,26 +40,30 @@
   ];
   let benefitCardVisible = false;
 
-  let downloadModalVisible = false;
-  let downloadAreaVisible;
+  let emailModalVisible = false;
+  let emailSubmitted = false;
   let emailForm;
-  let emailFormErr;
-  function toggleDownloadModal(visible = !downloadModalVisible) {
-    downloadModalVisible = visible;
+  let emailFormMessage;
+  function toggleEmailModal(visible = !emailModalVisible) {
+    emailModalVisible = visible;
     if (visible) {
       document.body.classList.add('overflow-hidden');
     } else {
       document.body.classList.remove('overflow-hidden');
     }
   }
-  async function submitEmailForm() {
+  async function submitEmailForm(e) {
+    const email = e.detail.email;
+    const uid = e.detail.uid;
+    const form = e.detail.form;
+
     try {
       const response = await fetch('/api/submit-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'k': import.meta.env.VITE_MY_API_KEY },
         body: JSON.stringify({
-          dataset_uid: 'uk_clothing_brands_sample',
-          email: emailForm.email.value,
+          dataset_uid: uid,
+          email: email,
           user_data: {
             browser: navigator.userAgent,
             os: navigator.platform,
@@ -74,16 +79,20 @@
         })
       });
       if (!response.ok) {
-        emailFormErr = "Something went wrong. Please try again.";
+        emailFormMessage = "Something went wrong. Please try again.";
       } else {
-        downloadAreaVisible = true;
-        localStorage.setItem('downloadAreaVisible', 'true');
-        emailForm.reset();
+        emailSubmitted = true;
+        localStorage.setItem('emailSubmitted', 'true');
+        form.reset();
+        if (uid === 'subscribe') {
+          emailFormMessage = '$Thank you for subscribing!';
+        }
       }
     } catch {
-      emailFormErr = "Something went wrong. Please try again.";
+      emailFormMessage = "Something went wrong. Please try again.";
     }
   }
+
 
   let brandCategoryChart;
   let igEngagementChart;
@@ -103,12 +112,12 @@
       }
     },
     {
-      title: "IG Engagement rate (ER)",
+      title: "IG Engagement score (ES)",
       chart: igEngagementChart,
       data: {
-        "Low (<1%)": 80,
-        "Medium (1-2%)": 12,
-        "High (>2%)": 8,
+        "Low (<0.2)": 80,
+        "Medium (0.2-0.6)": 12,
+        "High (>0.6)": 8,
       }
     },
     {
@@ -157,17 +166,17 @@
   };
 
   onMount(() => {
-    downloadAreaVisible = localStorage.getItem('downloadAreaVisible') === 'true';
+    emailSubmitted = localStorage.getItem('emailSubmitted') == 'true';
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') toggleDownloadModal(false);
+      if (e.key === 'Escape') toggleEmailModal(false);
     });
 
     for (const chart of charts) {
       new Chart(chart.chart, {
         type: 'pie',
         data: {
-          labels: Object.keys(chart.data).map(key => key + ' %'),
+          labels: Object.keys(chart.data).map(key => '% ' + key),
           datasets: [{
             data: Object.values(chart.data),
             backgroundColor: ['#d4e66f', '#92c78b', '#3fa28f', '#236a8a', '#033854'],
@@ -329,7 +338,7 @@
       {/each}
       <div class="px-4 py-2.5 border-r border-gray-300 text-sm!">11 more data points...</div>
     {/each}
-    <button on:click={toggleDownloadModal} class="text-left cursor-pointer hover:underline px-4 py-2.5 text-sm!">See all data...</button>
+    <button on:click={toggleEmailModal} class="text-left cursor-pointer hover:underline px-4 py-2.5 text-sm!">See all data...</button>
   </div>
 
   <div class="mt-10">
@@ -357,30 +366,76 @@
     </ul>
   </div>
 
-  <button class="brand-btn py-2 px-6 mt-10 mb-5 bg-accent-main/90! not-sm:block not-sm:w-full!" on:click={toggleDownloadModal}>Get the sample free now</button>
+  <!-- <button class="brand-btn py-2 px-6 mt-10 mb-5 bg-accent-main/90! not-sm:block not-sm:w-full!" on:click={toggleEmailModal}>Get the sample free now</button> -->
+  <div class="grid grid-cols-[270px_270px] items-center mt-10 not-sm:grid-cols-1 gap-y-5">
+    {#if !emailSubmitted}
+      <div>
+        <button on:click={toggleEmailModal}
+        class="brand-btn font-secondary! w-full py-3 bg-accent-main/90!">
+          <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
+        </button>
+      </div>
+      <div class="flex justify-center not-sm:order-3">
+        <button class="text-t-primary! cursor-pointer" on:click={toggleEmailModal}>
+          <i class="fa-brands fa-google text-green-800! mr-1"></i>View in Google Sheets
+        </button>
+      </div>
+    {:else}
+      <div>
+        <a href={DOWNLOAD_URL} download class="brand-btn font-secondary! block py-3 bg-accent-main/90!">
+          <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
+        </a>  
+      </div>
+      <div class="not-sm:order-3">
+        <a href={GSHEETS} target="_blank" class="text-t-primary! block text-center">
+          <i class="fa-brands fa-google text-green-800! mr-1"></i>Open in Google Sheets
+        </a>
+      </div>
+    {/if}
+    <p class="text-center text-sm! text-neutral-500! not-sm:order-2 -mt-4">CSV, Excel, JSON</p>
+  </div>
+</section>
+
+<section class="layout-wrapper pt-30">
+  <h1 class="sect-title">🚀 Full Dataset Launching November 2025</h1>
+  <p class="mb-10">
+    Our complete UK Brands dataset, with verified contacts, website stats, and social insights, will be released 
+    <span class="gradient-heading font-medium">
+      in {Math.ceil((new Date('2025-11-25') - new Date()) / 1000 / 60 / 60 / 24)} days.
+    </span>
+  </p>
+  <div class="max-w-[500px]">
+    <EmailForm uid="subscribe" title="Subscribe to not miss out on the launch ↓"
+      cta="Subscribe" {emailFormMessage} on:submitAction={submitEmailForm}
+    />
+  </div>
 </section>
 
 <Footer mt={15} />
 
-{#if downloadModalVisible}
+{#if emailModalVisible}
 <div class="fixed top-0 left-0 w-full h-full bg-black/70 z-50 flex items-center justify-center" 
 transition:fade={{duration: 100}}>
   <div class="bg-bg-main w-[450px] max-w-full rounded-lg p-10 overflow-x-hidden relative" 
   transition:fly={{y: 100, duration: 100}}>
-    <button on:click={() => toggleDownloadModal(false)} title="Close" class="absolute top-4 right-4 cursor-pointer hover:opacity-80">
+    <button on:click={() => toggleEmailModal(false)} title="Close" class="absolute top-4 right-4 cursor-pointer hover:opacity-80">
       <i class="fas fa-xmark text-lg! text-neutral-400!"></i>
     </button>
 
-    {#if !downloadAreaVisible}
-      <h3>Get your free 10-lead sample</h3>
+    {#if !emailSubmitted}
+      <!-- <h3>Get your free 10-lead sample</h3>
       <p class="mt-3">Instant access. Quality leads.</p>
       <form on:submit|preventDefault={submitEmailForm} class="mt-8" bind:this={emailForm}>
-        <input name="email" type="email" placeholder="Enter your email" class="w-full border-2 border-neutral-300 rounded-md p-2.5" required>
+        <input name="email" type="email" autocomplete="email" placeholder="Enter your email"
+        class="w-full border-2 border-neutral-300 rounded-md p-2.5" required>
         <button class="brand-btn py-2 px-6 w-full mt-2" type="submit">Get access</button>
       </form>
-      {#if emailFormErr}
-        <p class="text-red-400! mt-4 font-medium">{emailFormErr}</p>
-      {/if}
+      {#if emailFormMessage}
+        <p class="text-red-400! mt-4 font-medium">{emailFormMessage}</p>
+      {/if} -->
+      <EmailForm uid="uk_brands_sample" title="Get your free 10-lead sample" text="Instant access. Quality leads." 
+        cta="Get access" {emailFormMessage} on:submitAction={submitEmailForm} 
+      />
     {:else}
       <div transition:fade={{duration: 200}}>
         <h3>Thanks for sharing your email!</h3>
