@@ -1,26 +1,23 @@
+import { supabase } from '$lib/supabaseClient.js';
 import { json } from '@sveltejs/kit';
-import { supabase } from '$lib/supabaseClient';
 
 export async function POST({ request }) {
   const data = await request.json();
   if (request.headers.get('k') !== import.meta.env.VITE_MY_API_KEY) {
     console.error('Invalid API key');
     return json({ success: false, message: 'Invalid API key' });
-  } else if (!data.dataset_uid || !data.email || !data.user_data) {
-    console.error('Missing required data');
-    return json({ success: false, message: 'Missing required data' });
   }
 
   const { error } = await supabase
-    .from('emails')
+    .from('analytics')
     .insert([{ 
-      dataset_downloaded: data.dataset_uid, 
-      email: data.email, 
-      language: data.user_data.language,
-      os: data.user_data.os,
-      referrer: data.user_data.referrer,
-      time_on_page: data.user_data.timeOnPage,
-      user_data: json(data.user_data)
+      action_type: 'cold_email_refer',
+      action_details: data.id,
+      browser: data.browser,
+      language: data.language,
+      os: data.os,
+      referrer: data.referrer,
+      viewport_type: data.viewport_type,
     }]);
 
   if (error) {
