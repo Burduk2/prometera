@@ -36,7 +36,7 @@
   const marqueeItems = [
     "Save hours on prospecting ⏱️", 
     "Reach verified UK clothing brands instantly ✅", 
-    "100+ actionable leads ready for outreach 🎯",
+    "500+ actionable leads ready for outreach 🎯",
   ];
   let benefitCardVisible = false;
 
@@ -217,9 +217,9 @@
     <div class="flex items-center justify-between">
       <div>
         <div class="flex gap-x-4 flex-col items-center">
-          <h1 class="text-neutral-100! text-center">100+ Verified UK Clothing Brand Leads, Active on Meta Ads</h1>
+          <h1 class="text-neutral-100! text-center">500+ Verified UK Clothing Brand Leads, Active on Meta Ads</h1>
           <p class="text-neutral-400! text-center">
-            Agencies spend hours finding quality leads — we’ve done it for you. Preview 10 of 100+
+            Agencies spend hours finding quality leads — we’ve done it for you. Preview 10 of 500+
             verified UK clothing brands ready for outreach.
           </p>
           <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-8">
@@ -256,7 +256,7 @@
           icon: "fas fa-check"
         },
         {
-          title: "100+ Verified Leads",
+          title: "500+ Verified Leads",
           text: "Direct, verified contacts ready for outreach.",
           icon: "fas fa-users"
         },
@@ -279,7 +279,7 @@
     </div>
     <div class="w-[540px] max-w-full">
       <p class="rounded-xl bg-bg-main/80 mb-7" style="box-shadow: 0 0 20px 10px #fff">
-        All leads are carefully filtered to include UK clothing brands with a marketing budget, actively seeking to improve ad performance, social engagement, or online sales. Each lead is manually verified by our team, refreshed monthly, and fully actionable — no spam, no irrelevant contacts. Over 100 verified leads are included, ready for immediate outreach.
+        All leads are carefully filtered to include UK clothing brands with a marketing budget, actively seeking to improve ad performance, social engagement, or online sales. Each lead is manually verified by our team, refreshed monthly, and fully actionable — no spam, no irrelevant contacts. Over 500 verified leads are included, ready for immediate outreach.
       </p>
       <a href="#sample" class="brand-btn bg-accent-main/80! py-2.5 px-6 not-sm:w-full! not-sm:block">Get a free 10-lead sample now</a>
     </div>
