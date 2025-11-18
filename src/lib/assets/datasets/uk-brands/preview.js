@@ -1,23 +1,25 @@
 export const groups = {
+  shop: '#00ca65',
+  cool: '#8866eb',
   website: '#a3a3a3',
-  facebook: '#60a5fa',
-  'ad activity': '#eab308',
+  marketing: '#eab308',
   instagram: '#f472b6',
+  facebook: '#60a5fa',
 }
 
 export const schema = [
   {
     db_name: "name", display_name: "name", 
-    icon: 'fas fa-person', group: '',
+    icon: 'fab fa-shopify', group: 'shop',
   }, {
     db_name: "fb_tag", display_name: "category", 
-    icon: 'fas fa-tag' , group: '',
+    icon: 'fas fa-tag' , group: 'shop',
   }, {
     db_name: "phone", display_name: "business_phone", 
-    icon: 'fas fa-phone' , group: '',
+    icon: 'fas fa-phone' , group: 'shop',
   }, {
     db_name: "public_email", display_name: "business_email", 
-    icon: 'fas fa-envelope' , group: '',
+    icon: 'fas fa-envelope' , group: 'shop',
   }, {
     db_name: "website_url", display_name: "website_url", desc: "Business website link", 
     icon: 'fas fa-globe', group: 'website',
@@ -25,11 +27,29 @@ export const schema = [
     db_name: "website_mo_uv", display_name: "website_monthly_visitors", desc: "Monthly unique visitors to the website", 
     icon: 'fas fa-chart-line', group: 'website',
   }, {
-    db_name: "tech_stack", display_name: "ecom_platform", desc: "Ecommerce platform used by the business", 
-    icon: 'fas fa-code', group: 'website',
+    db_name: "estimated_monthly_revenue", display_name: "estimated_monthly_revenue", desc: "", 
+    icon: 'fas fa-dollar-sign', group: 'shop',
+  }, {
+    db_name: "tech_stack", display_name: "ecommerce_platform", desc: "Ecommerce platform used by the business", 
+    icon: 'fas fa-cart-shopping', group: 'website',
+  }, {
+    db_name: "em_tool", display_name: "email_marketing_tools_used", desc: "", 
+    icon: 'fas fa-paper-plane', group: 'marketing',
+  }, {
+    db_name: "ws_mobile", display_name: "website_performance_mobile", desc: "", 
+    icon: 'fas fa-gauge-high', group: 'website',
+  }, {
+    db_name: "ws_desktop", display_name: "website_performance_desktop", desc: "", 
+    icon: 'fas fa-gauge-high', group: 'website',
+  }, {
+    db_name: "product_count", display_name: "shop_product_count", desc: "", 
+    icon: 'fas fa-list-ol', group: 'shop',
+  }, {
+    db_name: "revenue_opportunities", display_name: "revenue_opportunities", desc: "Auto-generated weak points and upsell angles for every store", 
+    icon: 'fab fa-square-web-awesome', group: 'cool',
   }, {
     db_name: "meta_ad_count", display_name: "meta_ad_count", desc: "Number of active Meta Ads", 
-    icon: 'fab fa-meta', group: 'ad activity',
+    icon: 'fab fa-meta', group: 'marketing',
   }, {
     db_name: "fb_link", display_name: "facebook_link", desc: "Facebook page link", 
     icon: 'fab fa-facebook-f', group: 'facebook',

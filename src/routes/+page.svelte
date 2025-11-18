@@ -33,9 +33,33 @@
     finalData.push(newRow);
   }
 
+  const exampleLead = {
+    name: "Future Past Clothing",
+    category: "Artist",
+    business_phone: "+44 1283 440053",
+    business_email: "info@future-past.co.uk",
+    website_url: "https://future-past.co.uk",
+    website_monthly_visitors: 78393,
+    ecommerce_platform: "Shopify",
+    meta_ad_count: 1200,
+    facebook_link: "https://www.facebook.com/futurepastclothing",
+    facebook_reviews: "98% recommend (34 Reviews)",
+    instagram_link: "https://www.instagram.com/futurepastclothing",
+    instagram_verified: "yes",
+    instagram_engagement_score: '0.69 (High)',
+    instagram_description: "We’re decadent without precedent.We rage against the dying of the night. Designed with love, worn with pride.Prepare...",
+    instagram_followers: 11900,
+    email_marketing_tools_used: 'NA',
+    estimated_monthly_revenue: '200,000 USD',
+    website_performance_mobile: 88.5,
+    website_performance_desktop: 94.5,
+    revenue_opportunities: "Email automation; Mobile performance improvements;",
+    shop_product_count: '250+',
+  }
+
   const marqueeItems = [
     "Save hours on prospecting ⏱️", 
-    "Reach verified UK clothing brands instantly ✅", 
+    "Tailor your pitch to each store ✅", 
     "500+ actionable leads ready for outreach 🎯",
   ];
   let benefitCardVisible = false;
@@ -103,24 +127,6 @@
   // Sample data
   const charts = [
     {
-      title: "Brand distribution by category",
-      chart: brandCategoryChart,
-      data: {
-        "Men's": 9,
-        "Women's": 6,
-        "Other": 85
-      }
-    },
-    {
-      title: "IG Engagement score (ES)",
-      chart: igEngagementChart,
-      data: {
-        "Low (<0.2)": 80,
-        "Medium (0.2-0.6)": 12,
-        "High (>0.6)": 8,
-      }
-    },
-    {
       title: "E-commerce platforms",
       chart: ecommerceChart,
       data: {
@@ -145,7 +151,7 @@
       title: "Meta Ads per brand",
       chart: metaAdsChart,
       data: {
-        "0-10": 23,
+        "1-10": 23,
         "10-100": 49,
         "100-1000": 16,
         ">1000": 5
@@ -217,13 +223,19 @@
     <div class="flex items-center justify-between">
       <div>
         <div class="flex gap-x-4 flex-col items-center">
-          <h1 class="text-neutral-100! text-center">500+ Verified UK Clothing Brand Leads, Active on Meta Ads</h1>
-          <p class="text-neutral-400! text-center">
-            Agencies spend hours finding quality leads — we’ve done it for you. Preview 10 of 500+
-            verified UK clothing brands ready for outreach.
+          <h1 class="text-neutral-100! text-center">
+            <!-- 500+ Verified UK Clothing Brand Leads, Active on Meta Ads -->
+            Sell to Shopify Stores Already Spending Big—Curated Leads for
+            <span class="gradient-text font-main!">Shopify Developers</span>
+          </h1>
+          <p class="text-neutral-300! text-center">
+            Stop wasting hours hunting for high-value Shopify stores. Access a dataset of 500+ 
+            active stores, complete with website details, tech stack, social media stats, and 
+            revenue opportunity insights.
+            <span class="font-medium text-neutral-200! block mt-6">Prioritize the best prospects and close deals faster.</span>
           </p>
-          <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-8">
-            <a href="#sample" class="brand-btn py-2.5 px-7 hover:border-neutral-800! not-sm:block! not-sm:w-full!">Get a free 10-lead sample now</a>
+          <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-4">
+            <a href="#sample" class="brand-btn py-2.5 px-7 hover:border-neutral-800! not-sm:block! not-sm:w-full!">Get a free 10-store sample now</a>
           </div>
         </div>
         <!-- <p class="text-light-secondary! mt-5">* Schedule a free audit call</p> -->
@@ -241,22 +253,21 @@
   <img src="{line2Img}" alt="line" class="w-full absolute -top-[300px] left-0 z-0 select-none" draggable="false" />
 </div>
 <div class="layout-wrapper sm:mt-[120px]! mt-20! relative results-sect">
-  <h1>Leads curated specifically for marketing agencies</h1>
+  <p><i class="fa-solid fa-list mr-2"></i>a structured dataset of</p>
+  <h1>500+ verified shopify stores, ready for outreach</h1>
   <div class="flex items-center gap-y-10 mt-12 flex-wrap">
     <div class="flex gap-3 flex-wrap max-w-[600px]">
       {#each [
         { 
-          title: 'Relevant',
-          text: 'Brands with a marketing budget, looking to improve ad performance, social engagement, or online sales',
+          title: 'High-spend stores with development budgets',
           icon : 'fas fa-filter'
         },
         {
-          title: "Manually Verified",
-          text: "Every lead is checked by our team to ensure accuracy.",
+          title: "Manually Verified to ensure accuracy",
           icon: "fas fa-check"
         },
         {
-          title: "500+ Verified Leads",
+          title: "500+ qualified leads",
           text: "Direct, verified contacts ready for outreach.",
           icon: "fas fa-users"
         },
@@ -266,9 +277,12 @@
           icon: "fas fa-calendar-alt"
         },
         {
-          title: "No Spam",
-          text: "Only actionable business contacts.",
+          title: "Actionable business contacts",
           icon: "fas fa-shield-alt"
+        },
+        {
+          title: "Weak points & upsell angles included for every store",
+          icon: "fab fa-square-web-awesome"
         }
       ] as item}
         <div class="bg-accent-main/80 w-50 not-sm:flex-1 not-sm:min-w-[40%] max-w-full py-3 px-5 rounded-md border-2 border-dotted border-white">
@@ -279,9 +293,19 @@
     </div>
     <div class="w-[540px] max-w-full">
       <p class="rounded-xl bg-bg-main/80 mb-7" style="box-shadow: 0 0 20px 10px #fff">
-        All leads are carefully filtered to include UK clothing brands with a marketing budget, actively seeking to improve ad performance, social engagement, or online sales. Each lead is manually verified by our team, refreshed monthly, and fully actionable — no spam, no irrelevant contacts. Over 500 verified leads are included, ready for immediate outreach.
+        <!-- Each lead includes website data, tech stack, social media stats, ad activity, and 
+        performance indicators. The insights you can use to customize your pitch for every store.  -->
+        Each lead includes website data, tech stack, social media stats, ad activity, and 
+        performance indicators. Pre-generated 
+        <span style="color: {previewGroups.cool} !important" class="font-medium">revenue opportunities</span> 
+        that highlight the store’s weak points and potential upsells. These insights allow 
+        you to tailor your outreach with precision.
+        <br><br>
+        Manually verified and updated monthly, these leads let you skip hours 
+        of research and reach the stores most likely to convert. 
+        No dead contacts, no irrelevant stores, just actionable prospects ready for outreach.
       </p>
-      <a href="#sample" class="brand-btn bg-accent-main/80! py-2.5 px-6 not-sm:w-full! not-sm:block">Get a free 10-lead sample now</a>
+      <a href="#sample" class="brand-btn bg-accent-main/80! py-2.5 px-6 not-sm:w-full! not-sm:block">Get a free 10-store sample now</a>
     </div>
   </div>
 </div>
@@ -290,6 +314,68 @@
     <p class="mx-3">{item}</p>
   {/each}
 </Marquee>
+
+<section class="layout-wrapper pt-40">
+  <h1 class="sect-title">Turn Data into Deals</h1>
+  <div class="flex flex-wrap mt-8 gap-x-20">
+    <div class="bg-neutral-100 w-[550px] max-w-full p-5 rounded-lg">
+      <p class="font-medium mb-4">Example lead from our dataset</p>
+      <div>
+        {#each Object.entries(previewGroups) as [groupName, style]}
+          <div class="relative pl-3 my-4 flex flex-col gap-px">
+            <div class="absolute top-0 left-0 h-full w-1 rounded-full" style="background-color: {style}"></div>
+            {#each previewSchema as prop}
+              {#if prop.group === groupName}
+                <div class="{prop.group !== 'cool' ? 'flex' : ''} gap-3">
+                  <Tooltip text={prop.desc}>
+                    <p class="text-sm! whitespace-nowrap">
+                      <i class="{prop.icon} mr-1 text-xs! text-neutral-400!"></i> {prop.display_name}
+                    </p>
+                  </Tooltip>
+                  <p class="text-sm! font-medium {prop.display_name.includes('desc') ? 'whitespace-nowrap' : ''} overflow-hidden" style="color: {style}">
+                    {exampleLead[prop.display_name]}
+                  </p>
+                </div>
+              {/if}
+            {/each}
+          </div>
+        {/each}
+      </div>
+    </div>
+    <div class="flex-1 flex flex-col gap-y-8">
+      {#each Object.entries({
+        'Why this lead matters': [
+          '63k+ monthly visitors → clearly an active, scaled store.',
+          '96 running ads → strong ad budget, ideal for dev, CRO, and app upsells.',
+          '122k IG followers → large audience / strong social presence.',
+          'Full contact data → no hunting for emails or numbers.',
+        ],
+        'How a Shopify developer could use this': [
+          'Use the pre-generated revenue opportunities to tailor your outreach instantly.',
+          'Skip hours of research by having leads pre-verified and scored.',
+          'Use performance, tech details, and social stats to make each outreach more persuasive.',
+          'Identify upsell angles like site speed, conversion optimization, app integrations, and email automation.',
+        ]
+      }) as [title, items]}
+        <div>
+          <h4 class="font-medium">{title}</h4>
+          <ul class="list-inside mt-2 flex flex-col gap-y-1.5">
+            {#each items as item}
+              <li class="grid grid-cols-[auto_1fr] gap-x-2">
+                <i class="fas fa-check-circle mt-1" style="color: {item.includes('revenue opportunities') ? '#8866eb' : 'var(--color-accent-main)'}"></i>  
+                <p>{item}</p>
+              </li>
+            {/each}
+          </ul>
+        </div>
+      {/each}
+      <div>
+        <p class="mb-4 font-medium text-t-primary!">This is just one of 500+ verified Shopify stores in the dataset.</p>
+        <a href="#sample" class="brand-btn bg-accent-main/90! py-2.5 px-5">Get your free 10-store sample</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="py-12 bg-gray-100 mt-20 shadow-inner shadow-neutral-500/5">
   <div class="layout-wrapper">
@@ -309,10 +395,13 @@
 </section>
 
 <section id="sample" class="pt-30 overflow-x-scroll layout-wrapper">
-  <h1 class="sect-title">Free 10-lead sample</h1>
+  <h1 class="sect-title">Free 10-store sample</h1>
 
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="border border-gray-300 rounded-lg overflow-hidden grid bg-neutral-50 
-  border-b overflow-x-scroll w-fit mt-10 max-w-full relative"
+  border-b overflow-x-scroll w-fit mt-10 max-w-full relative cursor-pointer"
+  on:click={toggleEmailModal}
   style="grid-template-columns: repeat({essentialPreviewCols.length + 1}, 13rem);">
   <!-- Header -->   
     {#each essentialPreviewCols as col}
@@ -338,34 +427,9 @@
           {/if}
         </div>
       {/each}
-      <div class="px-4 py-2.5 border-r border-gray-300 text-sm!">11 more data points...</div>
+      <div class="px-4 py-2.5 border-r border-gray-300 text-sm!">{allPreviewCols.slice(essentialPreviewCols.length).length} more data points...</div>
     {/each}
     <button on:click={toggleEmailModal} class="text-left cursor-pointer hover:underline px-4 py-2.5 text-sm!">See all data...</button>
-  </div>
-
-  <div class="mt-10">
-    <p class="mb-4">Other data points</p>
-    <ul class="list-inside flex flex-wrap gap-x-4 gap-y-3 max-w-full">
-      {#each Object.entries(previewGroups) as [groupName, style]} 
-        <div class="flex gap-2 flex-wrap">
-          {#each allDataPoints as entry}
-          {#if entry.group === groupName}
-            <Tooltip text={entry.desc}>
-              <li class="flex items-center border py-1 px-2 rounded-md bg-red-100/10" 
-              style="border-color: {style}; background-color: {style}40;">
-                <div class="inline w-8">
-                  <i class="{entry.icon}" style="color: {style}"></i>
-                </div>
-                <span class="text-sm!">
-                  {entry.display_name}
-                </span>
-              </li>
-            </Tooltip>
-          {/if}
-          {/each}  
-        </div>
-      {/each}
-    </ul>
   </div>
 
   <!-- <button class="brand-btn py-2 px-6 mt-10 mb-5 bg-accent-main/90! not-sm:block not-sm:w-full!" on:click={toggleEmailModal}>Get the sample free now</button> -->
@@ -427,7 +491,7 @@ transition:fade={{duration: 100}}>
     </button>
 
     {#if !emailSubmitted}
-      <!-- <h3>Get your free 10-lead sample</h3>
+      <!-- <h3>Get your free 10-store sample</h3>
       <p class="mt-3">Instant access. Quality leads.</p>
       <form on:submit|preventDefault={submitEmailForm} class="mt-8" bind:this={emailForm}>
         <input name="email" type="email" autocomplete="email" placeholder="Enter your email"
@@ -437,7 +501,7 @@ transition:fade={{duration: 100}}>
       {#if emailFormMessage}
         <p class="text-red-400! mt-4 font-medium">{emailFormMessage}</p>
       {/if} -->
-      <EmailForm uid="uk_brands_sample" title="Get your free 10-lead sample" text="Instant access. Quality leads." 
+      <EmailForm uid="uk_brands_sample" title="Get your free 10-store sample" text="Instant access. Quality leads." 
         cta="Get access" {emailFormMessage} on:submitAction={submitEmailForm} 
       />
     {:else}
