@@ -24,38 +24,7 @@
   // const dataPoints = [allDataPoints.slice(0, allDataPoints.length / 2), allDataPoints.slice(allDataPoints.length / 2)];
   for (const entry of previewSchema) allPreviewCols.push(entry.display_name);
 
-  let finalData = [];
-  for (const row of previewData) {
-    let newRow = {};
-    for (const col of previewSchema) {
-      newRow[col.display_name] = row[col.db_name];
-    }
-    finalData.push(newRow);
-  }
-
-  const exampleLead = {
-    name: "Future Past Clothing",
-    category: "Artist",
-    business_phone: "+44 1283 440053",
-    business_email: "info@future-past.co.uk",
-    website_url: "https://future-past.co.uk",
-    website_monthly_visitors: 78393,
-    ecommerce_platform: "Shopify",
-    meta_ad_count: 1200,
-    facebook_link: "https://www.facebook.com/futurepastclothing",
-    facebook_reviews: "98% recommend (34 Reviews)",
-    instagram_link: "https://www.instagram.com/futurepastclothing",
-    instagram_verified: "yes",
-    instagram_engagement_score: '0.69 (High)',
-    instagram_description: "We’re decadent without precedent.We rage against the dying of the night. Designed with love, worn with pride.Prepare...",
-    instagram_followers: 11900,
-    email_marketing_tools_used: 'NA',
-    estimated_monthly_revenue: '200,000 USD',
-    website_performance_mobile: 88.5,
-    website_performance_desktop: 94.5,
-    revenue_opportunities: "Email automation; Mobile performance improvements;",
-    shop_product_count: '250+',
-  }
+  const exampleLead = previewData.find(row => row.name === 'Future Past Clothing');
 
   const marqueeItems = [
     "Save hours on prospecting ⏱️", 
@@ -118,24 +87,10 @@
   }
 
 
-  let brandCategoryChart;
-  let igEngagementChart;
-  let ecommerceChart;
-  let websiteVisitorsChart;
-  let metaAdsChart;
+  let websiteVisitorsChart, metaAdsChart, productCountChart;
 
   // Sample data
   const charts = [
-    {
-      title: "E-commerce platforms",
-      chart: ecommerceChart,
-      data: {
-        "Shopify": 73,
-        "WooCommerce": 6,
-        "Wix": 2,
-        "Other": 19,
-      }
-    },
     {
       title: "Monthly website visitors",
       chart: websiteVisitorsChart,
@@ -148,13 +103,23 @@
       }
     },
     {
-      title: "Meta Ads per brand",
+      title: "Meta Ads per store",
       chart: metaAdsChart,
       data: {
         "1-10": 23,
         "10-100": 49,
         "100-1000": 16,
         ">1000": 5
+      }
+    },
+    {
+      title: "Amount of products per store",
+      chart: productCountChart,
+      data: {
+        '1-10': 10,
+        '10-100': 21,
+        '100-250': 19,
+        '>250': 50,
       }
     }
   ];
@@ -170,9 +135,11 @@
       }
     }
   };
-
+  let sampleTable;
+  let sampleTableWidth = 0;
   onMount(() => {
     emailSubmitted = localStorage.getItem('emailSubmitted') == 'true';
+    sampleTableWidth = sampleTable.scrollWidth;
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') toggleEmailModal(false);
@@ -281,7 +248,7 @@
           icon: "fas fa-shield-alt"
         },
         {
-          title: "Weak points & upsell angles included for every store",
+          title: "Weak points & upsell angles included",
           icon: "fab fa-square-web-awesome"
         }
       ] as item}
@@ -293,17 +260,12 @@
     </div>
     <div class="w-[540px] max-w-full">
       <p class="rounded-xl bg-bg-main/80 mb-7" style="box-shadow: 0 0 20px 10px #fff">
-        <!-- Each lead includes website data, tech stack, social media stats, ad activity, and 
-        performance indicators. The insights you can use to customize your pitch for every store.  -->
-        Each lead includes website data, tech stack, social media stats, ad activity, and 
-        performance indicators. Pre-generated 
+        Each lead includes website data, social stats, ad activity, and contact info, along with pre-generated 
         <span style="color: {previewGroups.cool} !important" class="font-medium">revenue opportunities</span> 
-        that highlight the store’s weak points and potential upsells. These insights allow 
-        you to tailor your outreach with precision.
+        highlighting weak points and upsell potential.
         <br><br>
-        Manually verified and updated monthly, these leads let you skip hours 
-        of research and reach the stores most likely to convert. 
-        No dead contacts, no irrelevant stores, just actionable prospects ready for outreach.
+        <!-- Verified and updated monthly, these leads let you skip research and focus on stores most likely to convert. -->
+        The leads are verified and updated monthly, to let you skip research and focus on stores that are most likely to convert.
       </p>
       <a href="#sample" class="brand-btn bg-accent-main/80! py-2.5 px-6 not-sm:w-full! not-sm:block">Get a free 10-store sample now</a>
     </div>
@@ -315,7 +277,7 @@
   {/each}
 </Marquee>
 
-<section class="layout-wrapper pt-40">
+<section class="layout-wrapper pt-40" id="example">
   <h1 class="sect-title">Turn Data into Deals</h1>
   <div class="flex flex-wrap mt-8 gap-x-20">
     <div class="bg-neutral-100 w-[550px] max-w-full p-5 rounded-lg">
@@ -340,14 +302,15 @@
             {/each}
           </div>
         {/each}
+        <p class="text-sm! font-medium text-t-primary!">Imagine this 500x.</p>
       </div>
     </div>
-    <div class="flex-1 flex flex-col gap-y-8">
+    <div class="flex-1 flex flex-col gap-y-10">
       {#each Object.entries({
         'Why this lead matters': [
-          '63k+ monthly visitors → clearly an active, scaled store.',
-          '96 running ads → strong ad budget, ideal for dev, CRO, and app upsells.',
-          '122k IG followers → large audience / strong social presence.',
+          '78k+ monthly visitors → clearly an active, scaled store.',
+          '1200 running ads → strong ad budget, ideal for dev, CRO, and app upsells.',
+          '11k IG followers → large audience / strong social presence.',
           'Full contact data → no hunting for emails or numbers.',
         ],
         'How a Shopify developer could use this': [
@@ -394,14 +357,15 @@
   </div>
 </section>
 
-<section id="sample" class="pt-30 overflow-x-scroll layout-wrapper">
+<section id="sample" class="pt-15 mt-15 overflow-x-scroll layout-wrapper">
   <h1 class="sect-title">Free 10-store sample</h1>
-
+  <p>Preview the full dataset structure with all data points included.
+The sample contains 10 complete store entries, so you can data quality before accessing the full 500-store version.</p>
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="border border-gray-300 rounded-lg overflow-hidden grid bg-neutral-50 
-  border-b overflow-x-scroll w-fit mt-10 max-w-full relative cursor-pointer"
-  on:click={toggleEmailModal}
+  border-b overflow-x-hidden w-fit mt-10 max-w-full relative"
+  bind:this={sampleTable}
   style="grid-template-columns: repeat({essentialPreviewCols.length + 1}, 13rem);">
   <!-- Header -->   
     {#each essentialPreviewCols as col}
@@ -409,69 +373,75 @@
         {col}
       </div>
     {/each}
-    <div class="px-4 py-2 border-r border-b bg-neutral-100 border-gray-300 text-left font-medium text-sm!">
-      {allPreviewCols.slice(essentialPreviewCols.length).length} other data points...
+    <div class="px-4 py-2 border-l -ml-[0.5px] border-b bg-neutral-100 border-gray-300 text-left sticky right-0">
+      <a href="#example" class="font-medium text-sm! underline underline-offset-1">
+        → {allPreviewCols.length} total data points...
+      </a>
     </div>
     <!-- Body -->
-    {#each finalData.slice(0, 5) as row, i}
-      {#each essentialPreviewCols as col}
-        <div class="px-4 py-2.5 border-r border-gray-300 text-sm!" title="Subscribe to see the complete sample">
-          {#if col === 'name' || col === 'category'}
-            {row[col]}
-          {:else if col === 'business_phone'}
-            {row[col].slice(0, 3)}********{row[col].slice(-2)}
-          {:else if col === 'business_email'}
-            {row[col].split('@')[0].toLowerCase()}@***.{row[col].split('@')[1].split('.').slice(1).join('.')}
-          {:else}
-            ***
-          {/if}
+    <!-- <div class="relative"> -->
+      <div class="absolute h-full bg-neutral-100/50 top-[41px] left-0 backdrop-blur-[5px] w-full">
+        <div class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-fit">
+          <div class="grid grid-cols-[270px_270px] items-center mt-10 not-sm:grid-cols-1 gap-y-5 relative bottom-10">
+            {#if !emailSubmitted}
+              <div>
+                <button on:click={toggleEmailModal}
+                class="brand-btn font-secondary! w-full py-3 bg-accent-main/90!">
+                  <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
+                </button>
+              </div>
+              <div class="flex justify-center not-sm:order-3">
+                <button class="text-t-primary! cursor-pointer" on:click={toggleEmailModal}>
+                  <i class="fa-brands fa-google text-green-800! mr-1"></i>View in Google Sheets
+                </button>
+              </div>
+            {:else}
+              <div>
+                <a href={DOWNLOAD_URL} download class="brand-btn font-secondary! block py-3 bg-accent-main/90!">
+                  <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
+                </a>  
+              </div>
+              <div class="not-sm:order-3">
+                <a href={GSHEETS} target="_blank" class="text-t-primary! block text-center">
+                  <i class="fa-brands fa-google text-green-800! mr-1"></i>Open in Google Sheets
+                </a>
+              </div>
+            {/if}
+            <p class="text-center text-sm! text-neutral-500! not-sm:order-2 -mt-4">CSV, Excel, JSON</p>
+          </div>
         </div>
+      </div>
+      {#each previewData.slice(0, 10) as row, i}
+        {#each essentialPreviewCols as col}
+          <div class="px-4 py-2.5 border-r border-gray-300 text-sm!" title="Subscribe to see the complete sample">
+            {#if col === 'name' || col === 'category'}
+              {row[col]}
+            {:else if col === 'business_phone'}
+              {row[col].slice(0, 3)}********{row[col].slice(-2)}
+            {:else if col === 'business_email'}
+              {row[col]?.split('@')[0].toLowerCase()}@***.{row[col]?.split('@')[1]?.split('.').slice(1).join('.')}
+            {:else}
+              ***
+            {/if}
+          </div>
+        {/each}
+        <div class="px-4 py-2.5 border-r border-gray-300 text-sm!">{allPreviewCols.slice(essentialPreviewCols.length).length} more data points...</div>
       {/each}
-      <div class="px-4 py-2.5 border-r border-gray-300 text-sm!">{allPreviewCols.slice(essentialPreviewCols.length).length} more data points...</div>
-    {/each}
-    <button on:click={toggleEmailModal} class="text-left cursor-pointer hover:underline px-4 py-2.5 text-sm!">See all data...</button>
-  </div>
-
-  <!-- <button class="brand-btn py-2 px-6 mt-10 mb-5 bg-accent-main/90! not-sm:block not-sm:w-full!" on:click={toggleEmailModal}>Get the sample free now</button> -->
-  <div class="grid grid-cols-[270px_270px] items-center mt-10 not-sm:grid-cols-1 gap-y-5">
-    {#if !emailSubmitted}
-      <div>
-        <button on:click={toggleEmailModal}
-        class="brand-btn font-secondary! w-full py-3 bg-accent-main/90!">
-          <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
-        </button>
-      </div>
-      <div class="flex justify-center not-sm:order-3">
-        <button class="text-t-primary! cursor-pointer" on:click={toggleEmailModal}>
-          <i class="fa-brands fa-google text-green-800! mr-1"></i>View in Google Sheets
-        </button>
-      </div>
-    {:else}
-      <div>
-        <a href={DOWNLOAD_URL} download class="brand-btn font-secondary! block py-3 bg-accent-main/90!">
-          <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
-        </a>  
-      </div>
-      <div class="not-sm:order-3">
-        <a href={GSHEETS} target="_blank" class="text-t-primary! block text-center">
-          <i class="fa-brands fa-google text-green-800! mr-1"></i>Open in Google Sheets
-        </a>
-      </div>
-    {/if}
-    <p class="text-center text-sm! text-neutral-500! not-sm:order-2 -mt-4">CSV, Excel, JSON</p>
+      <button on:click={toggleEmailModal} class="text-left cursor-pointer hover:underline px-4 py-2.5 text-sm!">See all data...</button>
+    <!-- </div> -->
   </div>
 </section>
 
 <section class="layout-wrapper pt-30">
-  <h1 class="sect-title">🚀 Full Dataset Launching November 25, 2025</h1>
+  <h1 class="sect-title">🚀 Full Dataset Launching November 30, 2025</h1>
   <p class="mb-10">
-    Get early access to the complete UK Brands dataset — verified contacts, website stats, and social insights.
+    Get early access to the complete UK Shopify dataset with verified contacts, performance insights, and ready-to-use outreach angles.
   </p>
   <div class="max-w-[450px]">
     <p class="font-medium text-t-primary!">
       ⏳ Only 
       <span class="gradient-text">
-        {Math.ceil((new Date('2025-11-25') - new Date()) / 1000 / 60 / 60 / 24)} days left! 
+        {Math.ceil((new Date('2025-11-30') - new Date()) / 1000 / 60 / 60 / 24)} days left! 
       </span>
       Subscribe now to secure your early access and stay ahead of competitors.
     </p>
