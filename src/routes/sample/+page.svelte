@@ -3,13 +3,16 @@
   import { onMount } from 'svelte';
 
   onMount(async () => {
-    const hashParam = window.location.hash?.slice(1) || null;
+    const searchParams = new URLSearchParams(window.location.search);
+    const recipientId = searchParams?.get('ref') || '';
+    const emailId = searchParams?.get('e') || '';
     try {
       const response = await fetch('/api/write-analytics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'k': import.meta.env.VITE_MY_API_KEY },
         body: JSON.stringify({
-          id: hashParam,
+          id: recipientId,
+          email_id: emailId,
           browser: navigator.userAgent,
           os: navigator.platform,
           language: navigator.language,

@@ -12,7 +12,7 @@ export async function POST({ request }) {
     .from('analytics')
     .insert([{ 
       action_type: 'cold_email_refer',
-      action_details: data.id,
+      action_details: `uid:${data.id} eid:${data.email_id}`,
       browser: data.browser,
       language: data.language,
       os: data.os,
