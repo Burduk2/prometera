@@ -4,14 +4,13 @@
 
   onMount(async () => {
     const searchParams = new URLSearchParams(window.location.search);
-    const recipientId = searchParams?.get('ref') || '';
-    const emailId = searchParams?.get('e') || '';
+    const ids = searchParams?.get('id') || '';
     try {
       const response = await fetch('/api/write-analytics', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'k': import.meta.env.VITE_MY_API_KEY },
         body: JSON.stringify({
-          id: recipientId,
+          ids: ids,
           email_id: emailId,
           browser: navigator.userAgent,
           os: navigator.platform,
