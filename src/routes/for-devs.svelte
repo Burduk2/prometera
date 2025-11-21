@@ -1,4 +1,3 @@
-<!-- COPY FOR CRO EXPERTS -->
 <script>
   import { onMount } from 'svelte';
   import { fade, fly } from 'svelte/transition';
@@ -26,24 +25,6 @@
   for (const entry of previewSchema) allPreviewCols.push(entry.display_name);
 
   const exampleLead = previewData.find(row => row.name === 'Future Past Clothing');
-  const highlightedProps = ['website_monthly_visitors', 'estimated_monthly_revenue', 
-    'website_performance_mobile', 'email_marketing_tools', 'instagram_followers',
-    'meta_ad_count', 'revenue_opportunities'];
-
-  let highlightedPropsEls = {
-    'revenue_opportunities': () => revenueOppProp,
-  }
-  function setHighlightedEl(propName, el) {
-    return {
-      get() {
-        return highlightedPropsEls[propName];
-      },
-      set(el) {
-        highlightedPropsEls[propName] = el;
-      }
-    }
-  }
-
 
   const marqueeItems = [
     "Save hours on prospecting ⏱️", 
@@ -105,7 +86,10 @@
     }
   }
 
+
   let websiteVisitorsChart, metaAdsChart, productCountChart;
+
+  // Sample data
   const charts = [
     {
       title: "Monthly website visitors",
@@ -161,22 +145,6 @@
       if (e.key === 'Escape') toggleEmailModal(false);
     });
 
-    document.querySelectorAll('[data-hprop]').forEach(el => el.addEventListener('mouseover', e => {
-      const prop = el.dataset.hprop;
-      // document.querySelector(`[data-hprop-ref="${prop}"]`).style.outline = '3px solid var(--color-blue-500)';
-      document.querySelector(`[data-hprop-ref="${prop}"]`).animate(
-        [{outline: '0'}, {outline: '3px solid var(--color-blue-500)'}],
-        { duration: 100, fill: 'forwards' }
-      );
-    }));
-    document.querySelectorAll('[data-hprop]').forEach(el => el.addEventListener('mouseout', e => {
-      const prop = el.dataset.hprop;
-      document.querySelector(`[data-hprop-ref="${prop}"]`).animate(
-        [{outline: '3px solid var(--color-blue-500)'}, {outline: '0'}],
-        { duration: 100, fill: 'forwards' }
-      );
-    }));
-
     for (const chart of charts) {
       new Chart(chart.chart, {
         type: 'pie',
@@ -213,7 +181,7 @@
   <img src="{line1Img}" alt="line" class="w-full absolute top-18 left-0 z-0 select-none opacity-50" draggable="false" />
   <nav class="layout-wrapper pt-8">
     <a href="/" class="flex items-center">
-      <h3 class="text-neutral-300! select-none text-p! font-light">{NAME}</h3>
+      <h3 class="text-neutral-300! select-none text-p!">{NAME}</h3>
     </a>
   </nav>
 
@@ -223,13 +191,14 @@
       <div>
         <div class="flex gap-x-4 flex-col items-center">
           <h1 class="text-neutral-100! text-center">
-            500+ Shopify Stores with Conversion Gaps—Curated Leads for 
-            <span class="gradient-text font-main!">CRO Experts</span>
+            <!-- 500+ Verified UK Clothing Brand Leads, Active on Meta Ads -->
+            Sell to Shopify Stores Already Spending Big—Curated Leads for
+            <span class="gradient-text font-main!">Shopify Developers</span>
           </h1>
           <p class="text-neutral-300! text-center">
-            Stop wasting hours hunting for stores that may not even need your expertise. 
-            Access 500+ Shopify stores with measurable CRO gaps, traffic stats, 
-            and actionable insights, ready for outreach with CRO opportunities pre-identified for you.
+            Stop wasting hours hunting for high-value Shopify stores. Access a dataset of 500+ 
+            active stores, complete with website details, tech stack, social media stats, and 
+            revenue opportunity insights.
             <span class="font-medium text-neutral-200! block mt-6">Prioritize the best prospects and close deals faster.</span>
           </p>
           <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-4">
@@ -250,36 +219,55 @@
 <div class="relative">
   <img src="{line2Img}" alt="line" class="w-full absolute -top-[300px] left-0 z-0 select-none" draggable="false" />
 </div>
-<div class="layout-wrapper sm:mt-[120px]! mt-20! relative">
+<div class="layout-wrapper sm:mt-[120px]! mt-20! relative results-sect">
   <p><i class="fa-solid fa-list mr-2"></i>a structured dataset of</p>
-  <h1>Everything You Need to Pitch High-Impact CRO Improvements</h1>
-  <div class="mt-12">
-    <div class="flex gap-3 flex-wrap">
+  <h1>500+ verified shopify stores, ready for outreach</h1>
+  <div class="flex items-center gap-y-10 mt-12 flex-wrap">
+    <div class="flex gap-3 flex-wrap max-w-[600px]">
       {#each [
-        {
-          title: "500+ Verified Shopify Stores", 
-          text: "Pre-qualified leads ready for CRO outreach. No time wasted on irrelevant stores.",
-          icon: "fas fa-filter",
-        }, {
-          title: "Traffic & Engagement Data",
-          text: 'Identify stores where even small conversion improvements lead to big ROI.',
-          icon: "fas fa-chart-line",
-        }, {
-          title: 'Actionable CRO Insights',
-          text: 'Website performance, page speed, email marketing tools, and ad spend analyzed for each store for you.',
-          icon: "fab fa-square-web-awesome",
+        { 
+          title: 'High-spend stores with development budgets',
+          icon : 'fas fa-filter'
         },
+        {
+          title: "Manually Verified to ensure accuracy",
+          icon: "fas fa-check"
+        },
+        {
+          title: "500+ qualified leads",
+          text: "Direct, verified contacts ready for outreach.",
+          icon: "fas fa-users"
+        },
+        {
+          title: "Updated Monthly",
+          text: "Leads are refreshed every month to stay current.",
+          icon: "fas fa-calendar-alt"
+        },
+        {
+          title: "Actionable business contacts",
+          icon: "fas fa-shield-alt"
+        },
+        {
+          title: "Weak points & upsell angles included",
+          icon: "fab fa-square-web-awesome"
+        }
       ] as item}
-        <div class="bg-neutral-800 shadow-md sm:flex-1 sm:min-w-[300px] not-sm:w-full max-w-full py-7 px-7 
-        rounded-lg border border-accent-main/50">
-          <i class="{item.icon} text-accent-main! text-3xl!"></i>
-          <h4 class="mt-5 text-neutral-100!">{item.title}</h4>
-          <p class="mt-2 text-neutral-300!">{item.text}</p>
+        <div class="bg-accent-main/80 w-50 not-sm:flex-1 not-sm:min-w-[40%] max-w-full py-3 px-5 rounded-md border-2 border-dotted border-white">
+          <i class="{item.icon} text-neutral-700! text-xl!"></i>
+          <p class="mt-2">{item.title}</p>
         </div>
       {/each}
     </div>
-    <div class="flex justify-center my-15">
-      <a href="#sample" class="brand-btn bg-accent-main/80! py-3 px-9 not-sm:w-full! not-sm:block">Get a free 10-store sample now</a>
+    <div class="w-[540px] max-w-full">
+      <p class="rounded-xl bg-bg-main/80 mb-7" style="box-shadow: 0 0 20px 10px #fff">
+        Each lead includes website data, social stats, ad activity, and contact info, along with pre-generated 
+        <span style="color: {previewGroups.cool} !important" class="font-medium">revenue opportunities</span> 
+        highlighting weak points and upsell potential.
+        <br><br>
+        <!-- Verified and updated monthly, these leads let you skip research and focus on stores most likely to convert. -->
+        The leads are verified and updated monthly, to let you skip research and focus on stores that are most likely to convert.
+      </p>
+      <a href="#sample" class="brand-btn bg-accent-main/80! py-2.5 px-6 not-sm:w-full! not-sm:block">Get a free 10-store sample now</a>
     </div>
   </div>
 </div>
@@ -291,50 +279,25 @@
 
 <section class="layout-wrapper pt-40" id="example">
   <h1 class="sect-title">Turn Data into Deals</h1>
-  <div class="flex flex-wrap mt-8 gap-x-20 gap-y-15">
+  <div class="flex flex-wrap mt-8 gap-x-20">
     <div class="bg-neutral-100 w-[550px] max-w-full p-5 rounded-lg">
       <p class="font-medium mb-4">Example lead from our dataset</p>
       <div>
         {#each Object.entries(previewGroups) as [groupName, style]}
-          <div class="relative pl-3 my-4 flex flex-col gap-0">
+          <div class="relative pl-3 my-4 flex flex-col gap-px">
             <div class="absolute top-0 left-0 h-full w-1 rounded-full" style="background-color: {style}"></div>
             {#each previewSchema as prop}
               {#if prop.group === groupName}
-                <Tooltip text={prop.desc}>
-                  <div class="{prop.group !== 'cool' ? 'flex' : ''} gap-3">
-                    {#if highlightedProps.includes(prop.display_name)}
-                      <p class="px-2 py-1 my-px rounded text-sm! outline-offset-2" 
-                      style="background-color: {style + '30'}"
-                      data-hprop-ref={prop.display_name}>
-                        <i class="{prop.icon} mr-1 text-xs!" style="color: {style}"></i> 
-                        {prop.display_name}: 
-                        <span class="font-medium text-sm! {prop.group === 'cool' ? 'block' : ''}"
-                        style="color: {style}">
-                          {exampleLead[prop.display_name]}
-                        </span>
-                      </p>
-                    {:else}
-                      <p class="px-2 py-1 rounded text-sm! text-neutral-400! overflow-hidden 
-                      {prop.display_name.includes('desc') ? 'whitespace-nowrap' : ''}">
-                        <i class="{prop.icon} mr-1 text-xs! text-neutral-300!"></i> 
-                        {prop.display_name}: 
-                        <span class="text-sm!">
-                          {exampleLead[prop.display_name]}
-                        </span>
-                      </p>
-                    {/if}
-                    <!-- <p class="{highlightedProps.includes(prop.display_name) ? 'px-2 py-1 rounded' : ''} text-sm! text-neutral-400!
-                    {prop.display_name.includes('desc') ? 'whitespace-nowrap' : ''} overflow-hidden"
-                    style="{ highlightedProps.includes(prop.display_name) ? 'background-color: ' + style + '30' : '' }">
-                      <i class="{prop.icon} mr-1 text-xs! text-neutral-300!"></i> 
-                      {prop.display_name}: 
-                      <span style="color: {highlightedProps.includes(prop.display_name) ? style : style + 'dd'}"
-                      class="{highlightedProps.includes(prop.display_name) ? 'font-medium' : ''} text-sm!">
-                        {exampleLead[prop.display_name]}
-                      </span>
-                    </p> -->
-                  </div>
-                </Tooltip>
+                <div class="{prop.group !== 'cool' ? 'flex' : ''} gap-3">
+                  <Tooltip text={prop.desc}>
+                    <p class="text-sm! whitespace-nowrap">
+                      <i class="{prop.icon} mr-1 text-xs! text-neutral-400!"></i> {prop.display_name}
+                    </p>
+                  </Tooltip>
+                  <p class="text-sm! font-medium {prop.display_name.includes('desc') ? 'whitespace-nowrap' : ''} overflow-hidden" style="color: {style}">
+                    {exampleLead[prop.display_name]}
+                  </p>
+                </div>
               {/if}
             {/each}
           </div>
@@ -344,47 +307,27 @@
     </div>
     <div class="flex-1 flex flex-col gap-y-10">
       {#each Object.entries({
-        'Why This Lead Matters to CRO Experts': [
-          {
-            title: 'Pre-written CRO opportunities',
-            text: 'tailored optimization prompts, ready to use in outreach.',
-            prop: 'revenue_opportunities',
-          }, {
-            title: '~$300K monthly revenue',
-            text: 'they’re scaled and can afford CRO work.',
-            prop: 'estimated_monthly_revenue',
-          }, {
-            title: '78K+ monthly visitors',
-            text: 'enough traffic for fast, reliable A/B tests.',
-            prop: 'website_monthly_visitors',
-          }, {
-            title: 'Mobile score 88.5',
-            text: 'good, but not optimized. Easy win.',
-            prop: 'website_performance_mobile',
-          }, {
-            title: 'No email tool detected',
-            text: 'obvious lifecycle + retention opportunity.',
-            prop: 'email_marketing_tools',
-          }, {
-            title: '1200 active ads',
-            text: 'every small conversion lift brings real profit.',
-            prop: 'meta_ad_count',
-          }, {
-            title: '11K IG followers',
-            text: 'audience can be leveraged for optimized funnels and social proof.',
-            prop: 'instagram_followers',
-          },
+        'Why this lead matters': [
+          '78k+ monthly visitors → clearly an active, scaled store.',
+          '1200 running ads → strong ad budget, ideal for dev, CRO, and app upsells.',
+          '11k IG followers → large audience / strong social presence.',
+          'Full contact data → no hunting for emails or numbers.',
         ],
+        'How a Shopify developer could use this': [
+          'Use the pre-generated revenue opportunities to tailor your outreach instantly.',
+          'Skip hours of research by having leads pre-verified and scored.',
+          'Use performance, tech details, and social stats to make each outreach more persuasive.',
+          'Identify upsell angles like site speed, conversion optimization, app integrations, and email automation.',
+        ]
       }) as [title, items]}
         <div>
           <h4 class="font-medium">{title}</h4>
-          <ul class="list-inside mt-5 flex flex-col gap-y-3">
-            {#each items as {title, text, prop}}
-              <li class="grid grid-cols-[auto_1fr] gap-x-2" data-hprop={prop}>
-                <i class="fas fa-check-circle mt-1" style="color: {prop.includes('opportunit') ? '#8866eb' : 'var(--color-accent-main)'}"></i>  
-                <p><b class="font-medium text-t-primary!">{title}</b> → {text}</p>
+          <ul class="list-inside mt-2 flex flex-col gap-y-1.5">
+            {#each items as item}
+              <li class="grid grid-cols-[auto_1fr] gap-x-2">
+                <i class="fas fa-check-circle mt-1" style="color: {item.includes('revenue opportunities') ? '#8866eb' : 'var(--color-accent-main)'}"></i>  
+                <p>{item}</p>
               </li>
-              <hr class="border-neutral-200">
             {/each}
           </ul>
         </div>
@@ -416,9 +359,8 @@
 
 <section id="sample" class="pt-15 mt-15 overflow-x-scroll layout-wrapper">
   <h1 class="sect-title">Free 10-store sample</h1>
-  <p>
-    Preview 10 stores and verify data quality before accessing all 500+.
-  </p>
+  <p>Preview the full dataset structure with all data points included.
+The sample contains 10 complete store entries, so you can data quality before accessing the full 500-store version.</p>
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="border border-gray-300 rounded-lg overflow-hidden grid bg-neutral-50 
@@ -501,7 +443,7 @@
       <span class="gradient-text">
         {Math.ceil((new Date('2025-11-30') - new Date()) / 1000 / 60 / 60 / 24)} days left! 
       </span>
-      Be the first to access high-value CRO opportunities before competitors.
+      Subscribe now to secure your early access and stay ahead of competitors.
     </p>
     <EmailForm uid="subscribe" cta="Subscribe" {emailFormMessage} on:submitAction={submitEmailForm} />
   </div>
