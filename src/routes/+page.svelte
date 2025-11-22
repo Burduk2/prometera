@@ -223,8 +223,9 @@
       <div>
         <div class="flex gap-x-4 flex-col items-center">
           <h1 class="text-neutral-100! text-center">
-            500+ Shopify Stores with Conversion Gaps—Curated Leads for 
-            <span class="gradient-text font-main!">CRO Experts</span>
+            500+ Shopify Stores with clear 
+            <span class="gradient-text font-main!">CRO</span>
+            Gaps—Ready for Outreach 
           </h1>
           <p class="text-neutral-300! text-center">
             Stop wasting hours hunting for stores that may not even need your expertise. 
