@@ -492,7 +492,7 @@
 </section>
 
 <section class="layout-wrapper pt-30">
-  <h1 class="sect-title">🚀 Full Dataset Launching November 30, 2025</h1>
+  <h1 class="sect-title">🚀 Full Dataset Launching December 15, 2025</h1>
   <p class="mb-10">
     Get early access to the complete UK Shopify dataset with verified contacts, performance insights, and ready-to-use outreach angles.
   </p>
@@ -500,7 +500,7 @@
     <p class="font-medium text-t-primary!">
       ⏳ Only 
       <span class="gradient-text">
-        {Math.ceil((new Date('2025-11-30') - new Date()) / 1000 / 60 / 60 / 24)} days left! 
+        {Math.ceil((new Date('2025-12-15') - new Date()) / 1000 / 60 / 60 / 24)} days left!
       </span>
       Be the first to access high-value CRO opportunities before competitors.
     </p>
