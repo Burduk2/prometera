@@ -1,16 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+HU:wght@100..400&family=Playwrite+US+Trad:wght@100..400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unbounded:wght@200..900&display=swap');
 @import 'tailwindcss';
 
 @theme {
   --color-t-primary: #1A1A1F;
   --color-t-secondary: #5F5F62;
   --color-accent-main: #16d375;
-  --color-accent-secondary: #1A1A1F;
+  --color-accent-secondary: var(--color-pink-400);
   --color-bg-main: #fff;
   --color-bg-secondary: #f4f3ef;
   --color-bg-tetriary: #292524;
 
   --font-main: Unbounded, sans-serif;
+  --font-accent: Playwrite US Trad, sans-serif;
+  /* --font-accent: Playwrite HU, sans-serif; */
   --font-secondary: Poppins, sans-serif;
 
   --text-h1: 2.5rem;
@@ -27,6 +29,9 @@
 }
 .layout-wrapper {
   @apply w-[1200px] max-w-full px-5 m-auto
+}
+.layout-wrapper-sm {
+  @apply w-[800px] max-w-full px-5 m-auto
 }
 html { @apply scroll-smooth }
 body { @apply bg-bg-main }
@@ -52,26 +57,83 @@ h4 {
 p {
   @apply text-t-secondary max-w-[600px];
 }
+ul { @apply list-disc list-inside }
+input, textarea, select, .input {
+  @apply w-full border shadow-inner shadow-neutral-100/40 border-neutral-300/80 rounded-md px-3 py-2.5
+}
+label { @apply text-sm }
+label + :is(input, textarea, select, .input) { @apply mt-1 }
+input[type="range"] {
+  @apply h-1 bg-linear-to-l from-accent-main/50 to-gray-300 rounded-lg appearance-none outline-none
+  cursor-pointer hover:opacity-90 border-none
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  @apply w-1/2 h-1.5 bg-linear-to-l from-accent-main/50 to-gray-300 rounded-lg appearance-none outline-none border-none
+}
+input[type="range"]::-moz-range-track {
+  @apply w-1/2 h-1.5 bg-linear-to-l from-accent-main/50 to-gray-300 rounded-lg appearance-none outline-none border-none
+}
+input[type="range"]::-webkit-slider-thumb {
+  @apply appearance-none w-2.5 h-8 rounded-full bg-accent-main -translate-y-1/2 top-1/2 relative cursor-pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  @apply appearance-none w-2.5 h-8 rounded-full bg-accent-main -translate-y-1/2 top-1/2 relative cursor-pointer;
+}
 
 
 .brand-btn {
-  @apply bg-accent-main rounded-[.5em] text-neutral-800 font-main font-medium cursor-pointer transition text-center
-  border-2 border-accent-main outline-3 outline-offset-1 outline-transparent
+  @apply bg-accent-main/75 rounded-[.5em] text-neutral-800 font-medium cursor-pointer transition text-center
+  border border-accent-main py-2 px-5
 
-  hover:outline-blue-500 hover:border-bg-main
+  hover:brightness-95 hover:bg-accent-main/80 hover:shadow-md active:brightness-90
+}
+.brand-btn i {
+  @apply text-accent-main brightness-50 ml-1 transition;
+}
+.brand-btn:hover i {
+  @apply translate-x-0.5
 }
 .secondary-btn {
-  @apply bg-white/5 font-main rounded-[.5em] w-fit border-2 border-[#B7B7B7] text-neutral-300 text-center
-  cursor-pointer transition
+  @apply bg-neutral-200/40 rounded-[.5em] w-fit border border-neutral-300 font-medium text-center
+  cursor-pointer transition py-2 px-5 text-neutral-600
   
-  hover:bg-white/10 active:bg-white/15
+  hover:bg-neutral-400/20 active:bg-neutral-300/30 hover:shadow-xs
 }
 
 .gradient-text {
-  background: linear-gradient(30deg, #13c56c, 40%, #10d371);
+  background: linear-gradient(30deg, #13c56c, 40%, #26d77f);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
   font-size: inherit;
+}
+.brand-box {
+  @apply bg-bg-main shadow-lg shadow-neutral-500/20 rounded-lg border border-neutral-100
+  transition hover:shadow-xl
+}
+
+
+.hero-title i {
+  @apply text-accent-main text-h3 relative bottom-5 left-1 -ml-7 brightness-90
+  not-sm:-ml-6 not-sm:text-xl not-sm:bottom-3 not-sm:left-2 
+}
+.hero-hlight {
+  @apply bg-transparent
+}
+.hero-hlight.hlighted {
+  @apply bg-accent-main/20 outline-0 outline-accent-main/20 rounded-md transition duration-500
+}
+
+.case-study-card div {
+  @apply flex flex-col gap-y-1 px-7
+}
+.case-study-card h4 {
+  @apply font-secondary font-medium mb-2
+}
+.case-study-card h4 i {
+  @apply text-accent-main brightness-90 mr-1 relative
+}
+.case-study-card hr {
+  @apply border-neutral-200 border-dashed
 }

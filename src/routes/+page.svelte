@@ -1,562 +1,494 @@
-<!-- COPY FOR CRO EXPERTS -->
 <script>
-  import { onMount } from 'svelte';
-  import { fade, fly } from 'svelte/transition';
-  import Marquee from "svelte-fast-marquee";
-  import Chart from 'chart.js/auto';
-  import { NAME, EMAIL, DOMAIN, TITLE, DESC, inView, GSHEETS, DOWNLOAD_URL } from '$lib/index.js';
-  
-  import logoImg from '$lib/assets/logo-nobg-500.png';
+  import logoImg from '$lib/assets/logo.png';
   import line1Img from '$lib/assets/vector-line1.svg';
   import line2Img from '$lib/assets/vector-line2.svg';
   import line3Img from '$lib/assets/vector-line3.svg';
   import ogImg from '$lib/assets/og-image.png';
   import Footer from '$lib/components/Footer.svelte';
-	import { data as previewData, schema as previewSchema, groups as previewGroups, data } from '$lib/assets/datasets/uk-brands/preview.js';
-  import Tooltip from '$lib/components/Tooltip.svelte';
+  import { NAME, EMAIL, DOMAIN, TITLE, DESC, toggleModal, activeModal, submitEmailForm, GSHEETS_ADS, GSHEETS_PARTNERS } from '$lib/index.js';
+  import { onMount } from 'svelte';
+  import Modal from '$lib/components/Modal.svelte';
+  import { on } from 'svelte/events';
+  import { fade } from 'svelte/transition';
   import EmailForm from '$lib/components/EmailForm.svelte';
-
-  let startTime = Date.now();
-  let timeOnPage = 0;
-
-  let allPreviewCols = []
-  let essentialPreviewCols = ['name', 'category', 'business_phone', 'business_email'];
-  const allDataPoints = previewSchema.slice(essentialPreviewCols.length);
-  // const dataPoints = [allDataPoints.slice(0, allDataPoints.length / 2), allDataPoints.slice(allDataPoints.length / 2)];
-  for (const entry of previewSchema) allPreviewCols.push(entry.display_name);
-
-  const exampleLead = previewData.find(row => row.name === 'Future Past Clothing');
-  const highlightedProps = ['website_monthly_visitors', 'estimated_monthly_revenue', 
-    'website_performance_mobile', 'email_marketing_tools', 'instagram_followers',
-    'meta_ad_count', 'revenue_opportunities'];
-
-  let highlightedPropsEls = {
-    'revenue_opportunities': () => revenueOppProp,
-  }
-  function setHighlightedEl(propName, el) {
-    return {
-      get() {
-        return highlightedPropsEls[propName];
-      },
-      set(el) {
-        highlightedPropsEls[propName] = el;
-      }
-    }
-  }
+  import Nav from '$lib/components/Nav.svelte';
 
 
-  const marqueeItems = [
-    "Save hours on prospecting ⏱️", 
-    "Tailor your pitch to each store ✅", 
-    "500+ actionable leads ready for outreach 🎯",
-  ];
-  let benefitCardVisible = false;
+  const targetBusinessTypes = ['Marketing Agencies', 'E-commerce Businesses'];
+  // const mainCtaText = 'See the Data You Need';
+  const mainCtaText = 'Get Metrics That Fuel Growth';
+  const secondaryCtaText = 'Start a Project';
 
-  let emailModalVisible = false;
-  let emailSubmitted = false;
-  let emailForm;
-  let emailFormMessage;
-  function toggleEmailModal(visible = !emailModalVisible) {
-    emailModalVisible = visible;
-    if (visible) {
-      document.body.classList.add('overflow-hidden');
-    } else {
-      document.body.classList.remove('overflow-hidden');
-    }
-  }
-  async function submitEmailForm(e) {
-    const email = e.detail.email;
-    const uid = e.detail.uid;
-    const form = e.detail.form;
-
-    try {
-      const response = await fetch('/api/submit-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'k': import.meta.env.VITE_MY_API_KEY },
-        body: JSON.stringify({
-          dataset_uid: uid,
-          email: email,
-          user_data: {
-            browser: navigator.userAgent,
-            os: navigator.platform,
-            language: navigator.language,
-            viewport: {
-              width: window.innerWidth,
-              height: window.innerHeight,
-              type: window.innerWidth >= window.innerHeight ? 'landscape' : 'portrait',
-            },
-            referrer: document.referrer,
-            timeOnPage: Math.floor((Date.now() - startTime) / 1000),
-          }
-        })
-      });
-      if (!response.ok) {
-        emailFormMessage = "Something went wrong. Please try again.";
-      } else {
-        emailSubmitted = true;
-        localStorage.setItem('emailSubmitted', 'true');
-        form.reset();
-        if (uid === 'subscribe') {
-          emailFormMessage = '$Thank you for subscribing!';
-        }
-      }
-    } catch {
-      emailFormMessage = "Something went wrong. Please try again.";
-    }
-  }
-
-  let websiteVisitorsChart, metaAdsChart, productCountChart;
-  const charts = [
-    {
-      title: "Monthly website visitors",
-      chart: websiteVisitorsChart,
-      data: {
-        "0-1K": 11,
-        "1K-10K": 15,
-        "10K-100K": 37,
-        "100K-1M": 22,
-        ">1M": 15 
-      }
-    },
-    {
-      title: "Meta Ads per store",
-      chart: metaAdsChart,
-      data: {
-        "1-10": 23,
-        "10-100": 49,
-        "100-1000": 16,
-        ">1000": 5
-      }
-    },
-    {
-      title: "Amount of products per store",
-      chart: productCountChart,
-      data: {
-        '1-10': 10,
-        '10-100': 21,
-        '100-250': 19,
-        '>250': 50,
-      }
-    }
-  ];
-  const pieChartOptions = {
-    responsive: false,
-    plugins: {
-      legend: {
-        position: 'right',
-        labels: {
-          font: { size: 12, weight: 'normal' },
-          color: '#374151'
-        }
-      }
-    }
-  };
-  let sampleTable;
-  let sampleTableWidth = 0;
+  let heroRotator;
+  let heroHlighted = 1;
   onMount(() => {
-    emailSubmitted = localStorage.getItem('emailSubmitted') == 'true';
-    sampleTableWidth = sampleTable.scrollWidth;
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') toggleEmailModal(false);
-    });
-
-    document.querySelectorAll('[data-hprop]').forEach(el => el.addEventListener('mouseover', e => {
-      const prop = el.dataset.hprop;
-      // document.querySelector(`[data-hprop-ref="${prop}"]`).style.outline = '3px solid var(--color-blue-500)';
-      document.querySelector(`[data-hprop-ref="${prop}"]`).animate(
-        [{outline: '0'}, {outline: '3px solid var(--color-blue-500)'}],
-        { duration: 100, fill: 'forwards' }
-      );
-    }));
-    document.querySelectorAll('[data-hprop]').forEach(el => el.addEventListener('mouseout', e => {
-      const prop = el.dataset.hprop;
-      document.querySelector(`[data-hprop-ref="${prop}"]`).animate(
-        [{outline: '3px solid var(--color-blue-500)'}, {outline: '0'}],
-        { duration: 100, fill: 'forwards' }
-      );
-    }));
-
-    for (const chart of charts) {
-      new Chart(chart.chart, {
-        type: 'pie',
-        data: {
-          labels: Object.keys(chart.data).map(key => '% ' + key),
-          datasets: [{
-            data: Object.values(chart.data),
-            backgroundColor: ['#d4e66f', '#92c78b', '#3fa28f', '#236a8a', '#033854'],
-            borderWidth: 0,
-          }]
-        },
-        options: pieChartOptions
-      });
-    }
+    let id = 0;
+    let currCustomer = targetBusinessTypes[id];
+    const animation = [{ transform: 'rotateX(0deg)' }, { transform: 'rotateX(90deg)' }];
+    const animatioDuration = 200;
+    const animationOptions = { duration: animatioDuration, fill: 'forwards', easing: 'linear' }
+    heroRotator.innerText = currCustomer;
+    setInterval(async () => {
+      id = id === targetBusinessTypes.length - 1 ? 0 : id + 1;
+      currCustomer = targetBusinessTypes[id];
+      if (heroRotator) {
+        heroRotator.animate(animation, animationOptions);
+        await new Promise(r => setTimeout(r, animatioDuration));
+        heroRotator.innerHTML = window.innerWidth > 400 ? currCustomer : currCustomer.replace(' ', '<br>');
+        heroRotator.animate([animation[1], animation[0]], animationOptions);
+      }
+      heroHlighted = heroHlighted === 1 ? 2 : 1;
+    }, 4000);
   });
+
+
+  let selectedSample = { url: '', title: ''};
+  let sampleFormSubmitted;
+
+
+  let quizResults;
+  let quizData = {};
+  let currQuizQ = 0;
+  const quizQs = [
+    {
+      id: 'business_type',
+      title: 'Your business type',
+      subtitle: 'What best describes your business?',
+      options: [
+        { text: 'Marketing Agency', metrics: ["Ad creatives","Ad spend","Engagement rates","CTR","ROAS","Competitor campaigns","Lead company profiles","Email contacts"] },
+        { text: 'E-commerce Business', metrics: ["Product listings","Pricing","SKU details","Promotions","Reviews","Social engagement","Website performance","Ad creatives"] },
+        { text: 'Other B2B business', metrics: ["Company name","Website","Industry","Employee count","Supplier/partner offerings","Pricing","Ratings"] },
+      ],
+    },
+    {
+      id: 'goal',
+      cols: 1,
+      title: 'Your primary goal',
+      subtitle: 'What’s your main objective with business data?',
+      options: [
+        { text: 'Identify potential clients / leads', metrics: ["Company name","Website","Email","Phone","Industry","Employee count"] },
+        { text: 'Analyze competitors or market trends', metrics: ["Competitor names","Products/services","Pricing","Ad campaigns","Social metrics","Reviews"] },
+        { text: 'Improve ad performance or marketing strategy', metrics: ["Ad creatives","Ad spend","Engagement rates","CTR","ROAS","Audience targeting"] },
+        { text: 'Research partners / suppliers', metrics: ["Supplier name","Portfolio/offerings","Pricing","Ratings","Location","Contact email"] },
+        { text: 'Other', metrics: ["Other metrics — determined during consultation"] },
+      ],
+    },
+    {
+      id: 'priority',
+      cols: 1,
+      title: 'Data Priorities',
+      subtitle: 'Which type of data matters most to you?',
+      options: [
+        { text: 'Contact info & company profiles', metrics: ["Company name","Website","Email","Phone","Industry","Employee count"] },
+        { text: 'Social media metrics & engagement', metrics: ["Followers","Engagement rate","Posting frequency","Sentiment","Verified status"] },
+        { text: 'Product/service offerings', metrics: ["Product listings","Pricing","SKU details","Promotions","Reviews"] },
+        { text: 'Advertising or campaign performance', metrics: ["Ad creatives","Ad spend","Engagement rates","CTR","ROAS","Audience targeting"] },
+        { text: 'Other', metrics: ["Other metrics — determined during consultation"] },
+      ],
+    },
+    {
+      id: 'freq',
+      cols: 2,
+      title: 'Frequency / Updates',
+      subtitle: 'Do you need ongoing updates or a one-time dataset?',
+      options: [
+        { text: 'One-time dataset', metrics: [] },
+        { text: 'Regular updates', metrics: ["Weekly/Monthly updated performance metrics","Ongoing contact info updates","Ad campaign monitoring","Social engagement tracking"] },
+      ],
+    },
+  ];
+  
+  function generateQuizResults() {
+    const targetProps = new Set();
+    for (const props of Object.values(quizData)) props.forEach(prop => targetProps.add(prop));
+    return [...targetProps];
+  }
+
+  let projectBudget = 1;
+  let contactForm;
+
+  onMount(() => document.addEventListener('keydown', e => { if (e.key === 'Escape') toggleModal() }));
 </script>
 
 <svelte:head>
   <title>{TITLE}</title>
   <meta name="description" content={DESC}>
-  
+
   <meta property="og:title" content={TITLE}>
   <meta property="og:description" content={DESC}>
   <meta property="og:url" content="https://{DOMAIN}/">
-  <meta property="og:image" content={TITLE}>
+  <meta property="og:image" content={ogImg}>
   
   <meta name="twitter:title" content={TITLE}>
   <meta name="twitter:description" content={DESC}>
   <meta name="twitter:image" content={ogImg}>
 </svelte:head>
 
+<img src="{line1Img}" alt="line" class="w-full absolute top-18 left-0 z-0 select-none opacity-10" draggable="false" />
+<Nav />
 
-<div class="bg-linear-to-b from-[#121212] to-[#0D1A13] min-h-svh">
-  <img src="{line1Img}" alt="line" class="w-full absolute top-18 left-0 z-0 select-none opacity-50" draggable="false" />
-  <nav class="layout-wrapper pt-8">
-    <a href="/" class="flex items-center">
-      <h3 class="text-neutral-300! select-none text-p! font-light">{NAME}</h3>
-    </a>
-  </nav>
-
-  <!-- hero -->
-  <div class="layout-wrapper py-5 pt-10 hero-sect flex flex-col justify-center z-10 relative min-h-[90svh]">
-    <div class="flex items-center justify-between">
-      <div>
-        <div class="flex gap-x-4 flex-col items-center">
-          <h1 class="text-neutral-100! text-center">
-            500+ Shopify Stores with clear 
-            <span class="gradient-text font-main!">CRO</span>
-            Gaps—Ready for Outreach 
-          </h1>
-          <p class="text-neutral-300! text-center">
-            Stop wasting hours hunting for stores that may not even need your expertise. 
-            Access 500+ Shopify stores with measurable CRO gaps, traffic stats, 
-            and actionable insights, ready for outreach with CRO opportunities pre-identified for you.
-            <span class="font-medium text-neutral-200! block mt-6">Prioritize the best prospects and close deals faster.</span>
-          </p>
-          <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-4">
-            <a href="#sample" class="brand-btn py-2.5 px-7 hover:border-neutral-800! not-sm:block! not-sm:w-full!">Get a free 10-store sample now</a>
-          </div>
+<!-- hero -->
+<div class="layout-wrapper py-5 pt-10 hero-sect flex flex-col justify-center z-10 relative min-h-[90svh]">
+  <div class="flex items-center justify-center">
+    <div>
+      <div class="flex gap-x-4 flex-col items-center">
+        <h1 class="text-center hero-title text-t-secondary!">
+            Data 
+            <span class="text-h1! not-sm:text-h1-mobile! font-main! hero-hlight" class:hlighted={heroHlighted === 1}>
+              Collection 
+            </span>
+            <i class="fa-solid fa-magnifying-glass-chart"></i> &
+            <span class="text-h1! not-sm:text-h1-mobile! font-main! hero-hlight" class:hlighted={heroHlighted === 2}>
+              Automation 
+            </span>
+            <i class="fa-solid fa-circle-play"></i> 
+            for
+          <span class="block gradient-text font-main! pb-5 text-h1! not-sm:text-h1-mobile! -z-10 relative font-normal!"
+          bind:this={heroRotator}></span>
+        </h1>
+        <p class="text-center mt-2!">
+          <!-- Save time, gain insights, and make smarter decisions with automated data collection
+          tailored to your business. -->
+          Custom-built data collection that gives your business the information it needs without the manual work.
+        </p>
+        <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-8">
+          <a href="#quiz" class="brand-btn not-sm:block! not-sm:w-full!">
+            {mainCtaText} <i class="fas fa-arrow-right"></i>
+          </a>
+          <a href="#contact" class="secondary-btn not-sm:block! not-sm:w-full!">{secondaryCtaText}</a>
         </div>
-        <!-- <p class="text-light-secondary! mt-5">* Schedule a free audit call</p> -->
       </div>
-      <div>
-        <!-- <img src="{ogImg}" alt=""> -->
-      </div>
+    </div>
+    <div>
+      <!-- <img src="{ogImg}" alt=""> -->
     </div>
   </div>
 </div>
+
+
+<!-- why -->
+<section class="layout-wrapper">
+  <h1 class="sect-title">Why Teams Work With Prometera</h1>
+  <p>
+    Businesses waste hours gathering data manually. We replace that grind with fast,
+    accurate, and fully compliant data automation tailored to your workflow.
+  </p>
+  <div class="gap-5 mt-8 grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
+    {#each [
+      {
+        title: 'Public & Compliant Only',
+        text: 'We use exclusively publicly available business data — never private or sensitive information.',
+        icon: 'fa-solid fa-circle-check',
+        cta: { text: 'See Example Datasets', href: '#demos' },
+      }, {
+        title: 'Custom & Flexible',
+        text: 'Data collection tailored to your niche and needs, ready for analysis or system integration.',
+        icon: 'fas fa-gears',
+        cta: { text: mainCtaText, href: '#quiz' },
+      }, {
+        title: 'Satisfaction Guaranteed',
+        text: "Didn't find the data useful? You don't pay.",
+        icon: 'fas fa-medal',
+        cta: { text: secondaryCtaText, href: '#contact' },
+      },
+
+    ] as item}
+      <div class="brand-box p-7 flex flex-col justify-between">
+        <div>
+          <i class="{item.icon} text-accent-main! brightness-90 mb-5 text-h3!"></i>
+          <p class="font-medium text-h4! text-t-primary!">{item.title}</p>
+          <p class="mt-2">{item.text}</p>
+        </div>
+        <a href={item.cta.href} class="secondary-btn block mt-4">{item.cta.text}</a>
+      </div>
+    {/each}
+  </div>
+</section>
+
+
+<!-- demos -->
+<section class="layout-wrapper pt-30" id="demos">
+  <h1 class="sect-title">Demos of Past Work</h1>
+  <p>See the type of structured business data you’ll get — ready to use for research, marketing, or growth.</p>
+  <div class="mt-8 grid grid-cols-2 gap-x-6 not-md:grid-cols-1 gap-y-10">
+    {#each [
+      {
+        title: 'Competitor Ad Activity Insights',
+        objective: [
+          'Identify e-commerce stores actively running Meta ads',
+          'Track product offerings and compare social engagement',
+          'Avoid spending hours manually researching online',
+        ],
+        solution: [
+          'Business name, website, and product count',
+          'Social metrics (followers, engagement rate, verified status)',
+          'Meta ad activity indicators',
+          'Tech stack and email provider',
+          'Mobile/Desktop performance scores',
+          'Company-level contact info',
+        ],
+        sample_url: GSHEETS_ADS,
+        sample_title: 'Meta Advertisers',
+        outcome: [
+          'Faster research: leads or competitors found in minutes',
+          'Tailored to niche and requirements from day one',
+          'Reliable, structured, and actionable data',
+        ],
+      }, {
+        title: 'Top Shopify Partners Insights',
+        objective: [
+          'Discover top-performing Shopify partners and their portfolios',
+          'Analyze stats to find the right partner quickly',
+          'Save hours of manual partner research',
+        ],
+        solution: [
+          'Partner name and website',
+          'Portfolio URL and description',
+          'Location and ratings',
+          'Pricing and service offerings',
+          'Social links',
+          'Company-level contact info',
+        ],
+        sample_url: GSHEETS_PARTNERS,
+        sample_title: 'Shopify Partners',
+        outcome: [
+          'Quickly identify high-quality Shopify partners',
+          'Compare portfolios and ratings in one structured view',
+          'Save hours of manual research and vetting',
+        ],
+      },
+    ] as demo, i}
+      <div class="case-study-card brand-box py-7 flex flex-col gap-y-6 h-fit">
+        <div>
+          <h3>0{i + 1} / {demo.title}</h3>
+        </div>
+        <hr>
+        <div>
+          <h4><i class="fas fa-crosshairs"></i> Client objective</h4>
+          {#each demo.objective as objective}<p>{objective}.</p>{/each}
+        </div>
+        <hr>
+        <div>
+          <h4><i class="fas fa-check-to-slot"></i> Our solution</h4>
+          <p>A structured dataset including:</p>
+          <ul>
+            {#each demo.solution as solution}<li>{solution}</li>{/each}
+          </ul>
+          <p>Delivered in CSV, JSON, Excel — ready to use immediately.</p>
+          <button class="text-t-primary! cursor-pointer font-medium mt-5 hover:underline underline-offset-2 outline-none" 
+          on:click={() => {
+            selectedSample.url = demo.sample_url;
+            selectedSample.title = demo.sample_title;
+            localStorage.getItem('emailSubmitted') == 'true'
+              ? window.open(demo.sample_url, '_blank') : toggleModal('sample', true);
+          }}>See the Dataset Sample <i class="fas fa-arrow-up-right-from-square text-accent-main! brightness-40"></i></button>
+        </div>
+        <hr>
+        <div>
+          <h4><i class="fas fa-arrow-up-right-dots"></i> Client outcome</h4>
+          <ul>
+            {#each demo.outcome as outcome}<li>{outcome}.</li>{/each}
+          </ul>
+        </div>
+        <hr>
+        <div>
+          <a href="#quiz" class="brand-btn">{mainCtaText} <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    {/each}
+  </div>
+</section>
+<Modal name="sample">
+  <EmailForm title="Enter your email to access the sample" cta="Access the Sample"
+  text="See the kind of high-quality data we can collect for your business" 
+  on:submitAction={async (e) => {
+    const ok = await submitEmailForm(e.detail.email, e.detail.form, 'sample_access', { action_details: selectedSample.title });
+    if (ok) localStorage.setItem('emailSubmitted', 'true');
+    toggleModal('sample-thx', true);
+  }} />
+</Modal>
+<Modal name="sample-thx">
+ <h3>Thanks!</h3>
+  <p class="mt-2">You can now view the dataset sample in Google Sheets.</p>
+  <a href={selectedSample.url} target="_blank" class="brand-btn py-2 px-6 block w-fit mt-5">
+    See the Sample <i class="fas fa-arrow-up-right-from-square text-accent-main! brightness-40"></i>
+  </a>
+</Modal>
 
 
 <!-- how -->
-<div class="relative">
-  <img src="{line2Img}" alt="line" class="w-full absolute -top-[300px] left-0 z-0 select-none" draggable="false" />
-</div>
-<div class="layout-wrapper sm:mt-[120px]! mt-20! relative">
-  <p><i class="fa-solid fa-list mr-2"></i>a structured dataset of</p>
-  <h1>Everything You Need to Pitch High-Impact CRO Improvements</h1>
-  <div class="mt-12">
-    <div class="flex gap-3 flex-wrap">
-      {#each [
-        {
-          title: "500+ Verified Shopify Stores", 
-          text: "Pre-qualified leads ready for CRO outreach. No time wasted on irrelevant stores.",
-          icon: "fas fa-filter",
-        }, {
-          title: "Traffic & Engagement Data",
-          text: 'Identify stores where even small conversion improvements lead to big ROI.',
-          icon: "fas fa-chart-line",
-        }, {
-          title: 'Actionable CRO Insights',
-          text: 'Website performance, page speed, email marketing tools, and ad spend analyzed for each store for you.',
-          icon: "fab fa-square-web-awesome",
-        },
-      ] as item}
-        <div class="bg-neutral-800 shadow-md sm:flex-1 sm:min-w-[300px] not-sm:w-full max-w-full py-7 px-7 
-        rounded-lg border border-accent-main/50">
-          <i class="{item.icon} text-accent-main! text-3xl!"></i>
-          <h4 class="mt-5 text-neutral-100!">{item.title}</h4>
-          <p class="mt-2 text-neutral-300!">{item.text}</p>
-        </div>
-      {/each}
-    </div>
-    <div class="flex justify-center my-15">
-      <a href="#sample" class="brand-btn bg-accent-main/80! py-3 px-9 not-sm:w-full! not-sm:block">Get a free 10-store sample now</a>
-    </div>
-  </div>
-</div>
-<Marquee speed={40} class="mt-15">
-  {#each [...marqueeItems, ...marqueeItems, ...marqueeItems] as item}
-    <p class="mx-3">{item}</p>
-  {/each}
-</Marquee>
-
-<section class="layout-wrapper pt-40" id="example">
-  <h1 class="sect-title">Turn Data into Deals</h1>
-  <div class="flex flex-wrap mt-8 gap-x-20 gap-y-15">
-    <div class="bg-neutral-100 w-[550px] max-w-full p-5 rounded-lg">
-      <p class="font-medium mb-4">Example lead from our dataset</p>
-      <div>
-        {#each Object.entries(previewGroups) as [groupName, style]}
-          <div class="relative pl-3 my-4 flex flex-col gap-0">
-            <div class="absolute top-0 left-0 h-full w-1 rounded-full" style="background-color: {style}"></div>
-            {#each previewSchema as prop}
-              {#if prop.group === groupName}
-                <Tooltip text={prop.desc}>
-                  <div class="{prop.group !== 'cool' ? 'flex' : ''} gap-3">
-                    {#if highlightedProps.includes(prop.display_name)}
-                      <p class="px-2 py-1 my-px rounded text-sm! outline-offset-2" 
-                      style="background-color: {style + '30'}"
-                      data-hprop-ref={prop.display_name}>
-                        <i class="{prop.icon} mr-1 text-xs!" style="color: {style}"></i> 
-                        {prop.display_name}: 
-                        <span class="font-medium text-sm! {prop.group === 'cool' ? 'block' : ''}"
-                        style="color: {style}">
-                          {exampleLead[prop.display_name]}
-                        </span>
-                      </p>
-                    {:else}
-                      <p class="px-2 py-1 rounded text-sm! text-neutral-400! overflow-hidden 
-                      {prop.display_name.includes('desc') ? 'whitespace-nowrap' : ''}">
-                        <i class="{prop.icon} mr-1 text-xs! text-neutral-300!"></i> 
-                        {prop.display_name}: 
-                        <span class="text-sm!">
-                          {exampleLead[prop.display_name]}
-                        </span>
-                      </p>
-                    {/if}
-                    <!-- <p class="{highlightedProps.includes(prop.display_name) ? 'px-2 py-1 rounded' : ''} text-sm! text-neutral-400!
-                    {prop.display_name.includes('desc') ? 'whitespace-nowrap' : ''} overflow-hidden"
-                    style="{ highlightedProps.includes(prop.display_name) ? 'background-color: ' + style + '30' : '' }">
-                      <i class="{prop.icon} mr-1 text-xs! text-neutral-300!"></i> 
-                      {prop.display_name}: 
-                      <span style="color: {highlightedProps.includes(prop.display_name) ? style : style + 'dd'}"
-                      class="{highlightedProps.includes(prop.display_name) ? 'font-medium' : ''} text-sm!">
-                        {exampleLead[prop.display_name]}
-                      </span>
-                    </p> -->
-                  </div>
-                </Tooltip>
-              {/if}
-            {/each}
-          </div>
-        {/each}
-        <p class="text-sm! font-medium text-t-primary!">Imagine this 500x.</p>
+<section class="layout-wrapper pt-40">
+  <h1 class="sect-title">How It Works</h1>
+  <p>Fast, simple, and tailored to your business needs.</p>
+  <div class="mt-10 gap-5 grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
+    {#each [
+      {
+        title: 'Share your business focus',
+        text: 'Tell us your business focus and we’ll recommend the most valuable metrics to obtain'
+      }, {
+        title: 'Wait for delivery',
+        text: 'We collect, clean, and structure the data — ready within 24–48 hours',
+      }, {
+        title: 'Use it immediately',
+        text: 'Available in CSV/JSON/Excel, ready to integrate into your systems',
+      }
+    ] as item, i}
+      <div class="border-l-2 border-neutral-300 bg-neutral-50 border-dashed p-7 rounded-lg">
+        <p class="font-bold text-accent-main! mb-5 brightness-90">0{i + 1}</p>
+        <h4 class="">{item.title}</h4>
+        <p class="mt-2">{item.text}.</p>
       </div>
-    </div>
-    <div class="flex-1 flex flex-col gap-y-10">
-      {#each Object.entries({
-        'Why This Lead Matters to CRO Experts': [
-          {
-            title: 'Pre-written CRO opportunities',
-            text: 'tailored optimization prompts, ready to use in outreach.',
-            prop: 'revenue_opportunities',
-          }, {
-            title: '~$300K monthly revenue',
-            text: 'they’re scaled and can afford CRO work.',
-            prop: 'estimated_monthly_revenue',
-          }, {
-            title: '78K+ monthly visitors',
-            text: 'enough traffic for fast, reliable A/B tests.',
-            prop: 'website_monthly_visitors',
-          }, {
-            title: 'Mobile score 88.5',
-            text: 'good, but not optimized. Easy win.',
-            prop: 'website_performance_mobile',
-          }, {
-            title: 'No email tool detected',
-            text: 'obvious lifecycle + retention opportunity.',
-            prop: 'email_marketing_tools',
-          }, {
-            title: '1200 active ads',
-            text: 'every small conversion lift brings real profit.',
-            prop: 'meta_ad_count',
-          }, {
-            title: '11K IG followers',
-            text: 'audience can be leveraged for optimized funnels and social proof.',
-            prop: 'instagram_followers',
-          },
-        ],
-      }) as [title, items]}
-        <div>
-          <h4 class="font-medium">{title}</h4>
-          <ul class="list-inside mt-5 flex flex-col gap-y-3">
-            {#each items as {title, text, prop}}
-              <li class="grid grid-cols-[auto_1fr] gap-x-2" data-hprop={prop}>
-                <i class="fas fa-check-circle mt-1" style="color: {prop.includes('opportunit') ? '#8866eb' : 'var(--color-accent-main)'}"></i>  
-                <p><b class="font-medium text-t-primary!">{title}</b> → {text}</p>
-              </li>
-              <hr class="border-neutral-200">
-            {/each}
-          </ul>
-        </div>
-      {/each}
-      <div>
-        <p class="mb-4 font-medium text-t-primary!">This is just one of 500+ verified Shopify stores in the dataset.</p>
-        <a href="#sample" class="brand-btn bg-accent-main/90! py-2.5 px-5">Get your free 10-store sample</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="py-12 bg-gray-100 mt-20 shadow-inner shadow-neutral-500/5">
-  <div class="layout-wrapper">
-    <h1 class="text-2xl mb-8">Insights from the Full Dataset</h1>
-
-    <div class="flex flex-wrap gap-5">
-      {#each charts as chart}
-        <div class="border rounded-lg p-5 border-neutral-300 w-[370px] not-sm:w-full">
-          <p class="font-medium mb-2">{chart.title}</p>
-          <div class="my-[-15%]">
-            <canvas width="300" bind:this={chart.chart}></canvas>
-          </div>
-        </div>
-      {/each}
-    </div>
-  </div>
-</section>
-
-<section id="sample" class="pt-15 mt-15 overflow-x-scroll layout-wrapper">
-  <h1 class="sect-title">Free 10-store sample</h1>
-  <p>
-    Preview 10 stores and verify data quality before accessing all 500+.
-  </p>
-  <!-- svelte-ignore a11y_click_events_have_key_events -->
-  <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div class="border border-gray-300 rounded-lg overflow-hidden grid bg-neutral-50 
-  border-b overflow-x-hidden w-fit mt-10 max-w-full relative"
-  bind:this={sampleTable}
-  style="grid-template-columns: repeat({essentialPreviewCols.length + 1}, 13rem);">
-  <!-- Header -->   
-    {#each essentialPreviewCols as col}
-      <div class="px-4 py-2 border-r border-b bg-neutral-100 border-gray-300 text-left font-medium text-sm!">
-        {col}
-      </div>
+      
     {/each}
-    <div class="px-4 py-2 border-l -ml-[0.5px] border-b bg-neutral-100 border-gray-300 text-left sticky right-0">
-      <a href="#example" class="font-medium text-sm! underline underline-offset-1">
-        → {allPreviewCols.length} total data points...
-      </a>
-    </div>
-    <!-- Body -->
-    <!-- <div class="relative"> -->
-      <div class="absolute h-full bg-neutral-100/50 top-[41px] left-0 backdrop-blur-[5px] w-full">
-        <div class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-fit">
-          <div class="grid grid-cols-[270px_270px] items-center mt-10 not-sm:grid-cols-1 gap-y-5 relative bottom-10">
-            {#if !emailSubmitted}
-              <div>
-                <button on:click={toggleEmailModal}
-                class="brand-btn font-secondary! w-full py-3 bg-accent-main/90!">
-                  <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
-                </button>
-              </div>
-              <div class="flex justify-center not-sm:order-3">
-                <button class="text-t-primary! cursor-pointer" on:click={toggleEmailModal}>
-                  <i class="fa-brands fa-google text-green-800! mr-1"></i>View in Google Sheets
-                </button>
-              </div>
-            {:else}
-              <div>
-                <a href={DOWNLOAD_URL} download class="brand-btn font-secondary! block py-3 bg-accent-main/90!">
-                  <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
-                </a>  
-              </div>
-              <div class="not-sm:order-3">
-                <a href={GSHEETS} target="_blank" class="text-t-primary! block text-center">
-                  <i class="fa-brands fa-google text-green-800! mr-1"></i>Open in Google Sheets
-                </a>
-              </div>
-            {/if}
-            <p class="text-center text-sm! text-neutral-500! not-sm:order-2 -mt-4">CSV, Excel, JSON</p>
-          </div>
-        </div>
-      </div>
-      {#each previewData.slice(0, 10) as row, i}
-        {#each essentialPreviewCols as col}
-          <div class="px-4 py-2.5 border-r border-gray-300 text-sm!" title="Subscribe to see the complete sample">
-            {#if col === 'name' || col === 'category'}
-              {row[col]}
-            {:else if col === 'business_phone'}
-              {row[col].slice(0, 3)}********{row[col].slice(-2)}
-            {:else if col === 'business_email'}
-              {row[col]?.split('@')[0].toLowerCase()}@***.{row[col]?.split('@')[1]?.split('.').slice(1).join('.')}
-            {:else}
-              ***
-            {/if}
-          </div>
-        {/each}
-        <div class="px-4 py-2.5 border-r border-gray-300 text-sm!">{allPreviewCols.slice(essentialPreviewCols.length).length} more data points...</div>
-      {/each}
-      <button on:click={toggleEmailModal} class="text-left cursor-pointer hover:underline px-4 py-2.5 text-sm!">See all data...</button>
-    <!-- </div> -->
   </div>
+  <p class="mt-8">Optional regular updates available.</p>
 </section>
 
-<section class="layout-wrapper pt-30">
-  <h1 class="sect-title">🚀 Full Dataset Launching December 15, 2025</h1>
-  <p class="mb-10">
-    Get early access to the complete UK Shopify dataset with verified contacts, performance insights, and ready-to-use outreach angles.
-  </p>
-  <div class="max-w-[450px]">
-    <p class="font-medium text-t-primary!">
-      ⏳ Only 
-      <span class="gradient-text">
-        {Math.ceil((new Date('2025-12-15') - new Date()) / 1000 / 60 / 60 / 24)} days left!
-      </span>
-      Be the first to access high-value CRO opportunities before competitors.
+
+<!-- quiz -->
+<section class="layout-wrapper brand-box mt-40! p-10! flex flex-wrap gap-y-15 gap-x-10" id="quiz">
+  <div class="max-w-[800px]">
+    <h2 class="sect-title">Identify the Data Your Business Needs </h2>
+    <p class="mt-2">Answer a few quick questions, and we’ll show exactly which data will help your business grow.</p>
+    <button class="brand-btn mt-5 block w-fit"
+    on:click={() => toggleModal('quiz', true)}>Take a Quiz <i class="fas fa-arrow-right"></i></button>
+  </div>
+  <div class="flex justify-center flex-1 items-center">
+    <i class="fa-solid fa-square-check text-6xl! text-accent-main! brightness-90"></i>
+    <i class="fa-regular fa-square-check text-6xl!"></i>
+  </div>
+</section>
+<Modal name="quiz" w={600}>
+  {#if quizQs[currQuizQ]}
+    <p class="font-medium text-t-primary! mb-10 text-h4!">
+      Complete the quick questionnaire and see which metrics matter most for your growth.
     </p>
-    <EmailForm uid="subscribe" cta="Subscribe" {emailFormMessage} on:submitAction={submitEmailForm} />
+    <div class="w-full h-1 rounded-full bg-neutral-100 mb-10">
+      <div class="h-full bg-accent-main rounded-full duration-300" style="width: {currQuizQ / quizQs.length * 100}%"></div>
+    </div>
+    {#each quizQs as q, i}
+      {#if currQuizQ === i}
+        <div in:fade={{duration: 200}}>
+          <p class="font-medium">{i + 1}. {q.title}</p>
+          <p>{q.subtitle}</p>
+          <div class="grid gap-2 mt-6 not-sm:grid-cols-1!" style="grid-template-columns: repeat({q.cols || 2}, minmax(0, 1fr))">
+            {#each q.options as { text, metrics }}
+              <button class="secondary-btn w-auto!" on:click={() => { quizData[q.id] = metrics; currQuizQ++; }}>{text}</button>
+            {/each}
+          </div>
+        </div>
+        {#if currQuizQ !== 0}
+          <button class="mt-6 text-t-primary! font-medium hover:bg-neutral-100 p-3 rounded-md cursor-pointer transition"
+          on:click={() => currQuizQ-- }>
+            <i class="fas fa-arrow-left text-t-primary!"></i> Back
+          </button>
+        {/if}
+      {/if}
+    {/each}
+  {:else}
+    <p class="font-medium text-t-primary! mb-10 text-h4!">
+      We’ve identified 
+      <span class="text-accent-main! brightness-90 text-h4! font-semibold">{generateQuizResults().length}+</span>
+      key data points your business could target.
+    </p>
+    {#if !quizResults}
+      <ol class="list-decimal list-inside mt-4">
+        {#each generateQuizResults().slice(0, 3) as result}
+          <li>{result}</li>
+        {/each}
+      </ol>
+
+      <EmailForm cta="See the Data Points" text="... Enter your email to see the full list." on:submitAction={async (e) => {
+        const ok = await submitEmailForm(e.detail.email, e.detail.form, 'quiz_complete', {action_details: JSON.stringify(quizData)});
+        if (ok) quizResults = generateQuizResults();
+      }}/>
+    {:else} 
+      <ol class="list-decimal list-inside">
+        {#each quizResults as prop}
+          <li>{prop}</li>
+        {/each}
+      </ol>
+
+      <button class="brand-btn w-full! mt-5" on:click={() => toggleModal('contact', true) }>
+        Get This Data Collected for You <i class="fas fa-arrow-right"></i>
+      </button>
+    {/if}
+  {/if}
+</Modal>
+
+<hr class="my-15 border-dashed border-neutral-200">
+<!-- contact -->
+<section class="layout-wrapper brand-box p-10! flex flex-wrap gap-y-15 gap-x-10" id="contact">
+  <div>
+    <h2 class="sect-title">Request a Custom Data Project</h2>
+    <p class="mt-2">
+      Get in touch to discuss your data needs. We will review your use-case, define what can be collected, and outline a clear plan — free and without obligation.
+      <br><br>
+      You will receive a short consultation, recommended data points, and an estimated timeline.
+    </p>
+    <button class="brand-btn mt-5" on:click={() => toggleModal('contact', true)}>Request a Project <i class="fas fa-arrow-right"></i></button>
+  </div>
+  <div class="flex justify-center flex-1 items-center">
+    <i class="fa-solid fa-paper-plane text-6xl! border-accent-main border-b-3 rounded-md pb-5"></i>
   </div>
 </section>
+<Modal name="contact">
+  <h3>Start Your Custom Data Project</h3>
+  <p class="mt-3">
+    Submit your details and we’ll get in touch to discuss your data needs, recommend the best approach, 
+    and provide a <b class="font-medium text-t-primary!">free consultation.</b>
+  </p>
+  <!-- <p>Submit your details and we’ll contact you to plan your data project.</p> -->
 
-<Footer mt={15} />
+  <form on:submit|preventDefault={async () => {
+    const ok = await submitEmailForm(contactForm.email.value, contactForm, 'contact_submit', { 
+      action_details: Array.from(contactForm.elements)
+        .filter(el => el.name)
+        .reduce((acc, el) => {
+          acc[el.name] = el.value;
+          return acc;
+        }, {})
+    });
 
-{#if emailModalVisible}
-<div class="fixed top-0 left-0 w-full h-full bg-black/70 z-50 flex items-center justify-center" 
-transition:fade={{duration: 100}}>
-  <div class="bg-bg-main w-[450px] max-w-full rounded-lg p-10 overflow-x-hidden relative" 
-  transition:fly={{y: 100, duration: 100}}>
-    <button on:click={() => toggleEmailModal(false)} title="Close" class="absolute top-4 right-4 cursor-pointer hover:opacity-80">
-      <i class="fas fa-xmark text-lg! text-neutral-400!"></i>
-    </button>
-
-    {#if !emailSubmitted}
-      <!-- <h3>Get your free 10-store sample</h3>
-      <p class="mt-3">Instant access. Quality leads.</p>
-      <form on:submit|preventDefault={submitEmailForm} class="mt-8" bind:this={emailForm}>
-        <input name="email" type="email" autocomplete="email" placeholder="Enter your email"
-        class="w-full border-2 border-neutral-300 rounded-md p-2.5" required>
-        <button class="brand-btn py-2 px-6 w-full mt-2" type="submit">Get access</button>
-      </form>
-      {#if emailFormMessage}
-        <p class="text-red-400! mt-4 font-medium">{emailFormMessage}</p>
-      {/if} -->
-      <EmailForm uid="uk_brands_sample" title="Get your free 10-store sample" text="Instant access. Quality leads." 
-        cta="Get access" {emailFormMessage} on:submitAction={submitEmailForm} 
-      />
-    {:else}
-      <div transition:fade={{duration: 200}}>
-        <h3>Thanks for sharing your email!</h3>
-        <p class="mt-3 mb-8">Get your sample below:</p>
-        <div>
-          <a href="/files/uk_clothing_brands_sample.zip" download
-          class="brand-btn font-secondary! block py-3 bg-accent-main/90!">
-            <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
-          </a>
-          <p class="text-center mt-1 text-sm! text-neutral-500!">CSV, Excel, JSON</p>
-        </div>
-
-        <div class="relative flex justify-center my-4">
-          <p class="z-10 bg-bg-main relative px-3">or</p>
-          <div class="w-screen absolute top-1/2 -translate-y-1/2 bg-neutral-300 h-px"></div>
-        </div>
-
-        <div class="flex justify-center">
-          <a target="_blank" href={GSHEETS} class="text-t-primary!">
-            <i class="fa-brands fa-google text-green-800! mr-1"></i>Open in Google Sheets
-          </a>          
-        </div>
+  }} class="mt-8 flex flex-col gap-y-5" bind:this={contactForm}>
+    <div>
+      <label for="name-inp">Name *</label>
+      <input id="name-inp" type="text" autocomplete="name" name="name" required>
+    </div>
+    <div>
+      <label for="email-inp">Email *</label>
+      <input id="email-inp" type="email" autocomplete="email" name="email" required>
+    </div>
+    <div>
+      <label for="project-type-inp">Project Type *</label>
+      <select id="project-type-inp" name="project_type" required>
+        <option value="">Select an option</option>
+        <option value="lead_generation">Lead generation</option>
+        <option value="competitor_research">Competitor research</option>
+        <option value="market_analysis">Market analysis</option>
+        <option value="ad_performance">Ad performance</option>
+        <option value="custom">Custom</option>
+      </select>
+    </div>
+    <div>
+      <label for="budget-inp">Budget *</label>
+      <div class="flex gap-x-2 items-center input">
+        <p class="w-[10ch] font-medium">{['<$200', '$200-$500', '$500-$1500', '>$1500'][projectBudget]}</p>
+        <input class="flex-1 p-0!" id="budget-inp" name="budget" type="range" min="0" max="3" step="1" required bind:value={projectBudget}>
       </div>
-    {/if}
-  </div>
-</div>
-{/if}
+    </div>
+    <div>
+      <label for="message-inp">Message (optional)</label>
+      <textarea id="message-inp" rows="3" maxlength="1000" name="message"></textarea>
+    </div>
+    <div>
+      <p class="text-sm! opacity-70 mb-2">
+        By submitting, you agree to our <a target="_blank" href="/legal#privacy" class="underline text-sm!">Privacy Policy</a>
+      </p>
+      <button type="submit" class="brand-btn w-full">Start the Project</button>
+    </div>
+    <p class="font-medium message"></p>
+  </form>
+</Modal>
+
+<Footer mt={20} />

@@ -9,15 +9,16 @@ export async function POST({ request }) {
   }
 
   const { error } = await supabase
-    .from('analytics')
+    .from('actions')
     .insert([{ 
-      action_type: 'cold_email_refer',
-      action_details: data.id,
+      action_type: data.action_type,
+      email: data?.email,
+      action_details: data.action_details,
       browser: data.browser,
       language: data.language,
       os: data.os,
       referrer: data.referrer,
-      viewport_type: data.viewport_type,
+      viewport_type: data.viewport.type,
     }]);
 
   if (error) {
