@@ -6,7 +6,7 @@
   import Chart from 'chart.js/auto';
   import { NAME, EMAIL, DOMAIN, TITLE, DESC, inView, GSHEETS, DOWNLOAD_URL } from '$lib/index.js';
   
-  import logoImg from '$lib/assets/logo-nobg-500.png';
+  import logoImg from '$lib/assets/logo.png';
   import line1Img from '$lib/assets/vector-line1.svg';
   import line2Img from '$lib/assets/vector-line2.svg';
   import line3Img from '$lib/assets/vector-line3.svg';
