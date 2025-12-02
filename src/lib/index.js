@@ -7,6 +7,7 @@ export const EMAIL = 'contact@prometera.com';
 export const NAME = 'Prometera';
 export const GSHEETS_ADS = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=1387262382#gid=1387262382';
 export const GSHEETS_PARTNERS = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=1867109596#gid=1867109596';
+export const DOWNLOAD_URL = '/files/uk_shopify_leads_sample.zip';
 
 export function inView(node, { onEnter, threshold = 0.3 } = {}) {
   const observer = new IntersectionObserver(

@@ -4,7 +4,7 @@
   import { fade, fly } from 'svelte/transition';
   import Marquee from "svelte-fast-marquee";
   import Chart from 'chart.js/auto';
-  import { NAME, EMAIL, DOMAIN, TITLE, DESC, inView, GSHEETS, DOWNLOAD_URL } from '$lib/index.js';
+  import { NAME, EMAIL, DOMAIN, TITLE, DESC, inView, GSHEETS_ADS, DOWNLOAD_URL, } from '$lib/index.js';
   
   import logoImg from '$lib/assets/logo.png';
   import line1Img from '$lib/assets/vector-line1.svg';
@@ -476,7 +476,7 @@
                 </a>  
               </div>
               <div class="not-sm:order-3">
-                <a href={GSHEETS} target="_blank" class="text-t-primary! block text-center">
+                <a href={GSHEETS_ADS} target="_blank" class="text-t-primary! block text-center">
                   <i class="fa-brands fa-google text-green-800! mr-1"></i>Open in Google Sheets
                 </a>
               </div>
@@ -566,7 +566,7 @@ transition:fade={{duration: 100}}>
         </div>
 
         <div class="flex justify-center">
-          <a target="_blank" href={GSHEETS} class="text-t-primary!">
+          <a target="_blank" href={GSHEETS_ADS} class="text-t-primary!">
             <i class="fa-brands fa-google text-green-800! mr-1"></i>Open in Google Sheets
           </a>          
         </div>
