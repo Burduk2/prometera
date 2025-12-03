@@ -42,12 +42,13 @@ export function toggleModal(name, visible) {
 }
 
 
-export async function submitEmailForm(email, form, actionType, data) {
+export async function submitAction(email, form, actionType, data) {
   const routes = {
-    'quiz_complete': 'write-analytics',
+    'quiz_complete': 'submit-action',
     'subscribe': 'submit-email',
-    'contact_submit': 'write-analytics',
-    'sample_access': 'write-analytics',
+    'contact_submit': 'submit-action',
+    'sample_access': 'submit-action',
+    'cold_email_refer': 'submit-action',
   }
 
   let message, isMessageErr, success;
@@ -77,7 +78,7 @@ export async function submitEmailForm(email, form, actionType, data) {
     } else {
       localStorage.setItem('emailSubmitted', 'true');
       isMessageErr = false;
-      form.reset();
+      if (form) form.reset();
       if (actionType === 'subscribe') {
         message = 'Thank you for subscribing!';
       } else if (actionType === 'contact_submit') {
@@ -89,9 +90,11 @@ export async function submitEmailForm(email, form, actionType, data) {
     message = "Something went wrong. Please try again.";
   }
 
-  const style = !isMessageErr ? 'green-500' : 'red-400';
-  form.querySelector('.message').style.color = `var(--color-${style})`;
-  form.querySelector('.message').innerText = message || '';
+  if (form) {
+    const style = !isMessageErr ? 'green-500' : 'red-400';
+    form.querySelector('.message').style.color = `var(--color-${style})`;
+    form.querySelector('.message').innerText = message || '';
+  }
 
   return success;
 }

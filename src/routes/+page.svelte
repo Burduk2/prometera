@@ -5,7 +5,7 @@
   import line3Img from '$lib/assets/vector-line3.svg';
   import ogImg from '$lib/assets/og-image.png';
   import Footer from '$lib/components/Footer.svelte';
-  import { NAME, EMAIL, DOMAIN, TITLE, DESC, toggleModal, activeModal, submitEmailForm, GSHEETS_ADS, GSHEETS_PARTNERS } from '$lib/index.js';
+  import { NAME, EMAIL, DOMAIN, TITLE, DESC, toggleModal, activeModal, submitAction, GSHEETS_ADS, GSHEETS_PARTNERS } from '$lib/index.js';
   import { onMount } from 'svelte';
   import Modal from '$lib/components/Modal.svelte';
   import { on } from 'svelte/events';
@@ -13,6 +13,14 @@
   import EmailForm from '$lib/components/EmailForm.svelte';
   import Nav from '$lib/components/Nav.svelte';
 
+  onMount(() => {
+    const ref = new URLSearchParams(window.location.search)?.get('ref') || '';
+    const url = new URL(window.location.href);
+    url.searchParams.delete('ref');
+    window.history.replaceState({}, '', url);
+    if (!ref) return;
+    submitAction('', null, 'cold_email_refer', { action_details: ref });
+  });
 
   const targetBusinessTypes = ['Marketing Agencies', 'E-commerce Businesses'];
   // const mainCtaText = 'See the Data You Need';
@@ -302,7 +310,7 @@
   <EmailForm title="Enter your email to access the sample" cta="Access the Sample"
   text="See the kind of high-quality data we can collect for your business" 
   on:submitAction={async (e) => {
-    const ok = await submitEmailForm(e.detail.email, e.detail.form, 'sample_access', { action_details: selectedSample.title });
+    const ok = await submitAction(e.detail.email, e.detail.form, 'sample_access', { action_details: selectedSample.title });
     if (ok) localStorage.setItem('emailSubmitted', 'true');
     toggleModal('sample-thx', true);
   }} />
@@ -399,7 +407,7 @@
       </ol>
 
       <EmailForm cta="See the Data Points" text="... Enter your email to see the full list." on:submitAction={async (e) => {
-        const ok = await submitEmailForm(e.detail.email, e.detail.form, 'quiz_complete', {action_details: JSON.stringify(quizData)});
+        const ok = await submitAction(e.detail.email, e.detail.form, 'quiz_complete', {action_details: JSON.stringify(quizData)});
         if (ok) quizResults = generateQuizResults();
       }}/>
     {:else} 
@@ -441,7 +449,7 @@
   <!-- <p>Submit your details and we’ll contact you to plan your data project.</p> -->
 
   <form on:submit|preventDefault={async () => {
-    const ok = await submitEmailForm(contactForm.email.value, contactForm, 'contact_submit', { 
+    const ok = await submitAction(contactForm.email.value, contactForm, 'contact_submit', { 
       action_details: Array.from(contactForm.elements)
         .filter(el => el.name)
         .reduce((acc, el) => {
