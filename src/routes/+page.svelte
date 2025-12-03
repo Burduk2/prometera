@@ -400,13 +400,14 @@
       key data points your business could target.
     </p>
     {#if !quizResults}
-      <ol class="list-decimal list-inside mt-4">
-        {#each generateQuizResults().slice(0, 3) as result}
+      <ol class="list-decimal list-inside mt-4 relative -mb-5">
+        {#each generateQuizResults().slice(0, 5) as result}
           <li>{result}</li>
         {/each}
+        <div class="absolute w-full h-30 bg-linear-to-t from-white to-transparent bottom-0 z-50"></div>
       </ol>
 
-      <EmailForm cta="See the Data Points" text="... Enter your email to see the full list." on:submitAction={async (e) => {
+      <EmailForm cta="See the Full List" on:submitAction={async (e) => {
         const ok = await submitAction(e.detail.email, e.detail.form, 'quiz_complete', {action_details: JSON.stringify(quizData)});
         if (ok) quizResults = generateQuizResults();
       }}/>
