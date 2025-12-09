@@ -7,6 +7,7 @@ export const EMAIL = 'contact@prometera.com';
 export const NAME = 'Prometera';
 export const GSHEETS_ADS = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=1387262382#gid=1387262382';
 export const GSHEETS_PARTNERS = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=1867109596#gid=1867109596';
+export const GSHEETS_STORES = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=155050562#gid=155050562';
 export const DOWNLOAD_URL = '/files/uk_shopify_leads_sample.zip';
 
 export function inView(node, { onEnter, threshold = 0.3 } = {}) {
@@ -53,7 +54,7 @@ export async function submitAction(email, form, actionType, data) {
 
   let message, isMessageErr, success;
   try {
-    const response = await fetch(`/api/${routes[actionType]}`, {
+    const response = await fetch(`/api/${routes[actionType] || 'submit-action'}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'k': import.meta.env.VITE_MY_API_KEY },
       body: JSON.stringify({
@@ -79,7 +80,7 @@ export async function submitAction(email, form, actionType, data) {
       localStorage.setItem('emailSubmitted', 'true');
       isMessageErr = false;
       if (form) form.reset();
-      if (actionType === 'subscribe') {
+      if (actionType === 'sample_subscribe') {
         message = 'Thank you for subscribing!';
       } else if (actionType === 'contact_submit') {
         message = `Thanks for reaching out! We’ll analyze your data needs and email you a clear plan with next steps within one business day.`;

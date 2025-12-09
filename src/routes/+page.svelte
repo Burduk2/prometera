@@ -24,7 +24,8 @@
 
   const targetBusinessTypes = ['Marketing Agencies', 'E-commerce Businesses'];
   // const mainCtaText = 'See the Data You Need';
-  const mainCtaText = 'Get Metrics That Fuel Growth';
+  // const mainCtaText = 'Get Metrics That Fuel Growth';
+  const mainCtaText = 'What Data Do I Need';
   const secondaryCtaText = 'Start a Project';
 
   let heroRotator;
@@ -354,7 +355,8 @@
 
 
 <!-- quiz -->
-<section class="layout-wrapper brand-box mt-40! p-10! flex flex-wrap gap-y-15 gap-x-10" id="quiz">
+<div id="quiz"></div>
+<section class="layout-wrapper brand-box mt-40! p-10! flex flex-wrap gap-y-15 gap-x-10">
   <div class="max-w-[800px]">
     <h2 class="sect-title">Identify the Data Your Business Needs </h2>
     <p class="mt-2">Answer a few quick questions, and we’ll show exactly which data will help your business grow.</p>

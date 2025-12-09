@@ -4,7 +4,7 @@
   import { fade, fly } from 'svelte/transition';
   import Marquee from "svelte-fast-marquee";
   import Chart from 'chart.js/auto';
-  import { NAME, EMAIL, DOMAIN, TITLE, DESC, inView, GSHEETS_ADS, DOWNLOAD_URL, } from '$lib/index.js';
+  import { NAME, EMAIL, DOMAIN, TITLE, DESC, inView, GSHEETS_ADS, DOWNLOAD_URL, submitAction, GSHEETS_STORES, } from '$lib/index.js';
   
   import logoImg from '$lib/assets/logo.png';
   import line1Img from '$lib/assets/vector-line1.svg';
@@ -193,19 +193,7 @@
     }
 
     const id = new URLSearchParams(window.location.search)?.get('id') || '';
-    fetch('/api/write-analytics', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'k': import.meta.env.VITE_MY_API_KEY },
-      body: JSON.stringify({
-        id: id,
-        browser: navigator.userAgent,
-        os: navigator.platform,
-        language: navigator.language,
-        viewport_type: window.innerWidth >= window.innerHeight ? 'landscape' : 'portrait',
-        referrer: document.referrer,
-      })
-    }).catch((e) => console.error("Analytics error:", e));
-    
+    if (id) submitAction('', null, 'sample_cold_email_refer', { action_details: id });
   });
 </script>
 
@@ -506,7 +494,7 @@
   </div>
 </section>
 
-<section class="layout-wrapper pt-30">
+<section class="layout-wrapper pt-30" id="#subscribe">
   <h1 class="sect-title">🚀 Full Dataset Launching December 15, 2025</h1>
   <p class="mb-10">
     Get early access to the complete UK Shopify dataset with verified contacts, performance insights, and ready-to-use outreach angles.
@@ -519,7 +507,10 @@
       </span>
       Be the first to access high-value CRO opportunities before competitors.
     </p>
-    <EmailForm uid="subscribe" cta="Subscribe" {emailFormMessage} on:submitAction={submitEmailForm} />
+    <EmailForm uid="subscribe" cta="Subscribe" on:submitAction={async (e) => { 
+      const ok = await submitAction(e.detail.email, e.detail.form, 'sample_subscribe', { action_details: 'shopify_stores' });
+
+    }} />
   </div>
 </section>
 
@@ -545,15 +536,18 @@ transition:fade={{duration: 100}}>
       {#if emailFormMessage}
         <p class="text-red-400! mt-4 font-medium">{emailFormMessage}</p>
       {/if} -->
-      <EmailForm uid="uk_brands_sample" title="Get your free 10-store sample" text="Instant access. Quality leads." 
-        cta="Get access" {emailFormMessage} on:submitAction={submitEmailForm} 
+      <EmailForm title="Get your free 10-store sample" text="Instant access. Quality leads." 
+        cta="Get access" on:submitAction={async (e) => {
+          const ok = await submitAction(e.detail.email, e.detail.form, 'sample_download', { action_details: 'shopify_stores' });
+          if (ok) emailSubmitted = true;
+        }} 
       />
     {:else}
       <div transition:fade={{duration: 200}}>
         <h3>Thanks for sharing your email!</h3>
         <p class="mt-3 mb-8">Get your sample below:</p>
         <div>
-          <a href="/files/uk_clothing_brands_sample.zip" download
+          <a href="/files/uk_shopify_leads_sample.zip" download
           class="brand-btn font-secondary! block py-3 bg-accent-main/90!">
             <i class="fa-solid fa-circle-down text-green-800! mr-1"></i>Download ZIP
           </a>
@@ -566,7 +560,7 @@ transition:fade={{duration: 100}}>
         </div>
 
         <div class="flex justify-center">
-          <a target="_blank" href={GSHEETS_ADS} class="text-t-primary!">
+          <a target="_blank" href={GSHEETS_STORES} class="text-t-primary!">
             <i class="fa-brands fa-google text-green-800! mr-1"></i>Open in Google Sheets
           </a>          
         </div>
