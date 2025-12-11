@@ -3,11 +3,13 @@
   import Logo from "$lib/assets/logo.png";
 
   export let mt = 0;
+  export let clickable = true;
 </script>
 
 <footer class="mt-{mt} py-5">
   <div class="layout-wrapper">
-    <a class="flex justify-center mb-10" href="/">
+    <!-- svelte-ignore a11y_missing_attribut1e -->
+    <a class="flex justify-center mb-10" href="{clickable ? '/' : ''}">
       <img src={Logo} alt={NAME} class="w-10">
     </a>
     <p class="max-w-full! text-center">Have other inquries? Email us: 

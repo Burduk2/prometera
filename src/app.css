@@ -54,15 +54,18 @@ h3 {
 h4 {
   @apply text-h4
 }
+h5 {
+  @apply font-medium text-h4! text-t-primary font-secondary
+}
 p {
   @apply text-t-secondary max-w-[600px];
 }
 ul { @apply list-disc list-inside }
-input, textarea, select, .input {
+:is(input, textarea, select, .input):not(input[type="checkbox"]) {
   @apply w-full border shadow-inner shadow-neutral-100/40 border-neutral-300/80 rounded-md px-3 py-2.5
 }
 label { @apply text-sm }
-label + :is(input, textarea, select, .input) { @apply mt-1 }
+label + :is(input, textarea, select, .input):not(input[type="checkbox"]) { @apply mt-1 }
 input[type="range"] {
   @apply h-1 bg-linear-to-l from-accent-main/50 to-gray-300 rounded-lg appearance-none outline-none
   cursor-pointer hover:opacity-90 border-none
@@ -110,7 +113,7 @@ input[type="range"]::-moz-range-thumb {
 }
 .brand-box {
   @apply bg-bg-main shadow-lg shadow-neutral-500/20 rounded-lg border border-neutral-100
-  transition hover:shadow-xl
+  transition duration-500 hover:shadow-xl
 }
 
 

@@ -3,7 +3,7 @@ import { writable } from "svelte/store";
 export const TITLE = 'Prometera – Data Collection & Automation for Businesses';
 export const DESC = 'Custom-built data collection that gives your business the information it needs without the manual work.';
 export const DOMAIN = 'prometera.com';
-export const EMAIL = 'contact@prometera.com';
+export const EMAIL = 'artem@prometera.com';
 export const NAME = 'Prometera';
 export const GSHEETS_ADS = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=1387262382#gid=1387262382';
 export const GSHEETS_PARTNERS = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=1867109596#gid=1867109596';
