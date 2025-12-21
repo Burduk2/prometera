@@ -1,5 +1,5 @@
 <script>
-  import Nav from '$lib/components/Nav.svelte';
+  import Nav from '$lib/components/SimpleNav.svelte';
   import line1Img from '$lib/assets/vector-line1.svg';
   import { onMount } from 'svelte';
   import { DOMAIN, submitAction, toggleModal } from '$lib';
@@ -9,33 +9,32 @@
   import { fade } from 'svelte/transition';
   import Checkbox from '$lib/components/Checkbox.svelte';
   import ogImg from '$lib/assets/og-image.png';
-  import HeroImg from '$lib/assets/landing/hero.png';
+  import HeroImg1 from '$lib/assets/leadmag-hero.png';
 
   const templates = {
     title: {
-      a: '24 Hot Leads<br><span class="gradient-text font-main!">with CRO Gaps</span><br> in 24h',
-      a_raw: '24 Hot Leads with CRO Gaps in 24h'
+      a: 'Get 1 Discovery Call with a CRO-Interested Lead',
+      b: '1 Discovery Call with a CRO-Interested Lead',
     },
     subtitle: {
-      a: 'Leads ready for CRO projects. Delivered to your inbox in just 24 hours.',
-      b: 'Prospects ready to book CRO projects. Delivered to your inbox in just 24 hours.'
+      a: 'We find a business that fits your ideal client profile and is interested in CRO, book a call with a decision-maker, you only handle the close.',
     },
     cta: {
-      a: 'Claim My 24 Leads',
-      a1: 'Claim My 24 Leads Now',
+      a: 'Get the Call Booked Free',
     },
-    image: {},
+    image: {
+      a: HeroImg1,
+    },
     modal_title: {
-      a: 'Get Your 24 Hot Leads in 24h',
+      a: 'll',
     },
     modal_subtitle: {
-      a: 'Answer a few short questions so we can source the right prospects.',
-      b: 'Complete the questionnaire so we can deliver highly-qualified CRO leads straight to your inbox.',
+      a: 'll',
     }
   }
 
   const titleId = 'a';
-  const subtitleId = 'b';
+  const subtitleId = 'a';
   const ctaId = 'a';
   const imageId = 'a';
   const contentId = 'a';
@@ -43,7 +42,7 @@
   const modalSubtitleId = 'a';
 
   const TITLE = templates.title[titleId];
-  const META_TITLE = templates.title[titleId + '_raw'] + ' | Prometera';
+  const META_TITLE = templates.title[titleId + (templates.title[titleId + '_raw'] ? '_raw' : '')]  + ' | Prometera';
   const SUBTITLE = templates.subtitle[subtitleId];
   const CTA = templates.cta[ctaId];
   const IMG = templates.image[imageId];
@@ -130,7 +129,7 @@
   let customAnswerInp;
   let detailsInpValue;
 
-  submitAction('', null, 'landing_page_enter', '');
+  // submitAction('', null, 'landing_page_enter', '');
 </script>
 <svelte:head>
   <title>{META_TITLE}</title>
@@ -138,7 +137,7 @@
 
   <meta property="og:title" content={META_TITLE}>
   <meta property="og:description" content={SUBTITLE}>
-  <meta property="og:url" content="https://{DOMAIN}/leads">
+  <meta property="og:url" content="https://{DOMAIN}/call">
   <meta property="og:image" content={ogImg}>
   
   <meta name="twitter:title" content={META_TITLE}>
@@ -153,119 +152,118 @@
 <section class="layout-wrapper flex gap-y-20 relative items-center justify-between flex-wrap z-10 min-h-[92svh]">
   <div class="md:w-[450px] not-md:w-full max-w-full">
     <h1 class="not-md:text-center not-md:mt-20">{@html TITLE}</h1>
-    <p class="not-md:text-center max-w-none!">{SUBTITLE}</p>
+    <p class="not-md:text-center max-w-none!">{@html SUBTITLE}</p>
     <button class="brand-btn mt-6 block md:w-fit not-md:w-full" on:click={() => toggleModal('contact', true)}>
       {CTA} <i class="fa-solid fa-arrow-right"></i>
     </button>
+    <p class="mt-4 text-sm! opacity-70 italic">Attendance may vary; we focus on qualification and booking.</p>
   </div>
   <div class="flex justify-center not-md:w-full rounded-xl">
-    <img src={HeroImg} alt={SUBTITLE} class="w-[400px] max-w-full" style="box-shadow: 0 0 30px 20px #fff">
+    <img src={IMG} alt={SUBTITLE} class="w-[350px] max-w-full">
   </div>
 </section>
 
-<!-- content -->
+<!-- credibility -->
 <section class="layout-wrapper not-md:pt-30 pt-20">
-{#if contentId === 'a'}
-  <h1 class="sect-title">Leads That Convert Into CRO Projects</h1>
+  <h1 class="sect-title">Why It’s Free</h1>
   <p>
-    CRO agencies waste hours chasing unqualified leads. Prospecting is slow 
-    and rarely produces clients with real CRO opportunities. We fix that — fast.
+    We’re not doing this out of the kindness of our hearts. This free booked call gives you a taste of
+    our services, so you can see the value before starting our full paid program.
   </p>
+  <div class="flex flex-wrap gap-2 mt-5">
+    {#each ['No credit card required', 'No commitment'] as item}
+      <p class="bg-accent-main/60 text-t-primary! px-3 py-2 rounded-md font-medium">{item}</p>
+    {/each}
+  </div>
+</section>
+
+<!-- how -->
+<section class="layout-wrapper not-md:pt-30 pt-40">
+  <h1 class="sect-title">How It Works</h1>
   <div class="gap-5 mt-8 grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))]">
     {#each [
       {
-        title: 'Stop wasting time',
-        text: 'No more irrelevant prospects.',
-        cta: 'Get relevant prospects',
-        icon: 'fa-solid fa-business-time'
-      }, {
-        title: 'Focus on strategy',
-        text: 'We do the research, verification, and enrichment.',
-        cta: '',
-        icon: 'far fa-circle-dot'
-      }, {
-        title: 'Get real opportunities',
-        text: 'Every lead has a real CRO gap you can optimize.',
-        cta: '',
+        title: 'Find the Right Businesses',
+        text: 'We identify companies that match your ideal client profile (ICP)',
+        cta: 'Tell us your ICP',
         icon: 'fa-solid fa-arrows-down-to-people'
+      }, {
+        title: 'Qualify Leads',
+        text: 'We make sure they have the budget, decision-making authority, and CRO needs.',
+        cta: CTA,
+        icon: 'fas fa-check-double'
+      }, {
+        title: 'Book the Call',
+        text: 'A fully qualified discovery call is scheduled directly on your calendar.',
+        cta: CTA,
+        icon: 'fas fa-calendar-check'
       }
-    ] as item}
+    ] as item, i}
       <div class="brand-box p-7 flex flex-col justify-between">
         <div>
-          <i class="{item.icon} text-accent-main! text-3xl! mb-5 brightness-90"></i>
+          <p class="font-medium text-2xl! mb-10">
+            0{i + 1}
+          </p>
+          <i class="{item.icon} text-accent-main! text-2xl! mb-5 brightness-85"></i>
           <h5>{item.title}</h5>
           <p class="mt-2">{item.text}</p>
         </div>
-        <button on:click={() => toggleModal('contact', true)} class="secondary-btn mt-5">
-          Claim My Leads <i class="fa-solid fa-arrow-right"></i>
-        </button>
       </div>
     {/each}
-  </div>
-
-  <h1 class="sect-title mt-40">Start Outreach Immediately</h1>
-  <p>Everything you need to take action right away:</p>
-  <div class="flex gap-x-15 gap-y-10 my-10 flex-wrap items-center">
-    <div class="flex flex-col gap-y-2">
-      {#each [
-        { title: '24 niche-specific leads ready to pitch CRO services', }, 
-        { title: 'Verified contacts for immediate outreach', }, 
-        { title: 'CSV / CRM-ready for seamless integration', },
-      ] as item, i}
-        <p class="border border-neutral-200 border-l-accent-main bg-neutral-100 p-4 rounded-md">
-          <b class="font-medium mr-2">#{i+1}</b>
-          {item.title}
-        </p>
-      {/each}
-    </div>
-    <div class="flex flex-col gap-y-2 border-l pl-10 border-neutral-200 py-2 h-full">
-      {#each [
-        { 
-          title: 'Priority scoring', 
-          text: 'Contact hottest prospects first.',
-          icon: 'fas fa-list-ol' 
-        }, 
-        { 
-          title: 'Email & call script templates', 
-          text: 'Start contacting immediately.',
-          icon: 'fas fa-pen-clip' 
-        }
-      ] as item, i}
-        <fieldset class="border-yellow-500 border-2 bg-neutral-50 p-4 rounded-md shadow-yellow-500/15 group hover:shadow-md">
-          <legend class="text-yellow-500! font-medium">Bonus</legend>
-          <p class="-mt-2 font-medium">
-            <i class="{item.icon} text-yellow-500! mr-2 group-hover:scale-125 transition"></i> 
-            {item.title} <i class="fas fa-arrow-right"></i> {item.text}
-          </p>
-          <!-- <p class="mt-1">{item.text}</p> -->
-        </fieldset>
-      {/each}
-    </div>
-  </div>
-  <button class="brand-btn" on:click={() => toggleModal('contact', true)}>
-    Start Outreach <i class="fa-solid fa-arrow-right"></i>
+    <button on:click={() => toggleModal('contact', true)} class="brand-btn not-sm:py-4! py-3!">
+    {CTA} <i class="fa-solid fa-arrow-right"></i>
   </button>
-
-  <h1 class="sect-title mt-40">How It Works</h1>
-  <div class="mt-10 flex gap-x-5 sm:items-center flex-wrap gap-y-5 not-sm:flex-col">
-    <button class="secondary-btn" on:click={() => toggleModal('contact', true)}>
-      Tell us your niche <i class="fa-solid fa-arrow-right"></i>
-    </button>
-    <p class="font-medium">
-      <i class="fa-solid fa-arrow-right mr-2 text-neutral-300!"></i> get leads in 24h
-    </p>
-    <p class="font-medium">
-      <i class="fa-solid fa-arrow-right mr-2 text-neutral-300!"></i> start booking calls
-    </p>
   </div>
+</section>
 
+<!-- who -->
+<section class="layout-wrapper not-md:mt-30! mt-40! border-t border-b border-neutral-300 py-10">
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-x-10 gap-y-8">
+    <h1 class="sect-title">This Is For</h1>
+    {#each Object.entries({
+      'fas fa-circle-check text-accent-main! brightness-90': [
+        'CRO agencies that want sales-ready discovery calls',
+        'Teams that clearly know their ICP',
+        'Those seeking conversations with engaged decision-makers',
+      ],
+      'fas fa-circle-xmark text-neutral-800!': [
+        'Businesses outside the CRO space',
+        'Anyone looking for lead lists, training, or hand-holding',
+        'Agencies expecting instant revenue'
+      ]
+    }) as [icon, items], i}
+      <div class="flex flex-col gap-y-3">
+        {#each items as item}
+          <div class="flex">
+            <div class="w-7">
+              <i class="{icon}"></i> 
+            </div>
+            <p class="flex-1">{item}</p>
+          </div>
+        {/each}
+      </div>
+    {/each}
+    <!-- <p>
+        CRO agencies/specialists that want sales-ready discovery calls, not raw leads.
+        If you already know your ICP and want conversations with decision-makers ready 
+        to invest in CRO, this is for you.
+      </p> -->
+  </div>
+</section>
+
+<!-- why -->
+<section class="layout-wrapper not-md:pt-30 pt-40">
+  <h1 class="sect-title">What’s in It for You</h1>
+</section>
+
+<!-- contact -->
+<section class="layout-wrapper not-md:pt-30 pt-20">
   <div class="brand-box mt-30 p-8 flex flex-wrap items-center gap-x-5 gap-y-3">
     <button on:click={() => toggleModal('contact', true)} class="brand-btn not-sm:w-full">
       {CTA} <i class="fa-solid fa-arrow-right"></i>
     </button>
     <em>Only <b class="font-semibold text-t-primary!">{BATCHES_LEFT}</b> free batches left this month.</em>
   </div>
-{/if}
 </section>
 
 <Footer mt={40} clickable={false} />

@@ -25,5 +25,6 @@ export async function POST({ request }) {
     console.error('Supabase error:', error.message);
     return json({ success: false, message: error.message }, { status: 500 })
   }
+
   return json({ success: true });
 }

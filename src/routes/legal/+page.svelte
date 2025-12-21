@@ -3,13 +3,16 @@
   import line2Img from '$lib/assets/vector-line2.svg';
   import line3Img from '$lib/assets/vector-line3.svg';
   import Footer from '$lib/components/Footer.svelte';
-  import Nav from '$lib/components/Nav.svelte';
+  import Nav from '$lib/components/SimpleNav.svelte';
   import { NAME, EMAIL, DOMAIN, TITLE, DESC } from '$lib/index.js';
 
 </script>
 <style>
   h3 + p { margin-top: .5rem }
 </style>
+<svelte:head>
+  <title>Legal | {NAME}</title>
+</svelte:head>
 
 <img src="{line1Img}" alt="line" class="w-full absolute top-18 left-0 z-0 select-none opacity-5" draggable="false" />
 <Nav />

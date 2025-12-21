@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
-export const TITLE = 'Prometera – Data Collection & Automation for Businesses';
-export const DESC = 'Custom-built data collection that gives your business the information it needs without the manual work.';
+export const TITLE = 'Prevent Buy Box Loss — Protect Your Revenue — Prometera';
+export const DESC = 'Get daily risk signals for your top ASINs so you protect your Buy Box, and prevent revenue loss — all without manual tracking or spreadsheets.';
 export const DOMAIN = 'prometera.com';
 export const EMAIL = 'artem@prometera.com';
 export const NAME = 'Prometera';
@@ -33,28 +33,16 @@ export function inView(node, { onEnter, threshold = 0.3 } = {}) {
 
 
 export let activeModal = writable(null);
-export function toggleModal(name, visible) {
-  activeModal.set(visible ? name : null);
-  if (visible) {
-    document.body.classList.add('overflow-hidden');
-  } else {
-    document.body.classList.remove('overflow-hidden');
-  }
+export function toggleModal(name) {
+  activeModal.set(name ? name : null);
+  document.body.classList[name ? 'add' : 'remove']('overflow-hidden');
 }
 
 
 export async function submitAction(email, form, actionType, data) {
-  const routes = {
-    'quiz_complete': 'submit-action',
-    'subscribe': 'submit-email',
-    'contact_submit': 'submit-action',
-    'sample_access': 'submit-action',
-    'cold_email_refer': 'submit-action',
-  }
-
   let message, isMessageErr, success;
   try {
-    const response = await fetch(`/api/${routes[actionType] || 'submit-action'}`, {
+    const response = await fetch(`/api/submit-action`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'k': import.meta.env.VITE_MY_API_KEY },
       body: JSON.stringify({
