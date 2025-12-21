@@ -20,12 +20,12 @@
   import Nav from '$lib/components/SimpleNav.svelte';
 
   onMount(() => {
-    const ref = new URLSearchParams(window.location.search)?.get('ref') || '';
+    const params = new URLSearchParams(window.location.search);
     const url = new URL(window.location.href);
+    const coldEmailRef = params?.get('ref') || '';
     url.searchParams.delete('ref');
     window.history.replaceState({}, '', url);
-    if (!ref) return;
-    submitAction('', null, 'cold_email_refer', { action_details: ref });
+    if (coldEmailRef) submitAction('', null, 'cold_email_refer', { action_details: coldEmailRef });
   });
 
   const primaryCtaText = 'Join the Waitlist';
