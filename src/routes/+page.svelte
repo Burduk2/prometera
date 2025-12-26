@@ -300,8 +300,8 @@
 <Footer mt={20} />
 
 <Modal name="signup">
-  <EmailForm title="Join the Waitlist" cta={primaryCtaText}
-  text="Be among the first to try Prometera BuyBox Sentinel and get early access to the tool." 
+  <EmailForm title="Join the Waitlist & Get a Checklist" cta="Join & Get the Checklist"
+  text="Spot risks early and protect your revenue before your ASINs lose the Buy Box." 
   on:submitAction={async (e) => {
     const ok = await submitAction(e.detail.email, e.detail.form, 'sentinel_subscribe');
     if (ok) localStorage.setItem('emailSubmitted', 'true');
@@ -316,6 +316,12 @@
     <li>You’ll be notified as soon as early access opens.</li>
     <li>Get feature previews, tips, and updates while we build.</li>
     <li>Enjoy a 1-month free trial once the tool is out.</li>
+    <li>
+      <a href="https://www.notion.so/Buy-Box-Risk-Checklist-2d5b3f35e80d80088619fb04001d94e8" 
+      class="hover:underline underline-offset-2 text-accent-main! brightness-80" target="_blank">
+        View the Checklist <i class="fa-solid fa-arrow-up-right-from-square text-accent-main! relative bottom-px ml-px"></i>
+      </a>
+    </li>
   </ul>
   <hr class="border-neutral-300 my-7">
   <h5>Invite a Friend</h5>
