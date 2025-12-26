@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 
 const refs = {
   sentinel: 'lin_post_refer',
+  waitlist: 'checklist_refer',
   // buybox: '',
 }
 
