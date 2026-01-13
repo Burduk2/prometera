@@ -12,7 +12,7 @@
     <a class="flex justify-center mb-10" href="{clickable ? '/' : ''}">
       <img src={Logo} alt={NAME} class="w-10">
     </a>
-    <p class="max-w-full! text-center">Have other inquiries? Email us: 
+    <p class="max-w-full! text-center">Have other enquiries? Email us: 
       <a href="mailto:{EMAIL}" class="underline underline-offset-2 text-t-primary">{EMAIL}</a>
     </p>
     <div class="flex flex-wrap justify-center mt-10">

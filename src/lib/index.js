@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
-export const TITLE = 'Prevent Buy Box Loss — Protect Your Revenue — Prometera';
-export const DESC = 'Get daily risk signals for your top ASINs so you protect your Buy Box, and prevent revenue loss — all without manual tracking or spreadsheets.';
+export const TITLE = 'Stop losing patients to a confusing website';
+export const DESC = 'Turn your website into a high-performance booking machine in one week. No site rebuilds, no new software, and no copywriting required from you.';
 export const DOMAIN = 'prometera.com';
 export const EMAIL = 'artem@prometera.com';
 export const NAME = 'Prometera';
