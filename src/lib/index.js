@@ -1,5 +1,7 @@
 import { writable } from "svelte/store";
 
+export const TITLE = 'Prometera'; // defaults
+export const DESC = ''; // defaults
 export const TITLE_DENTAL = 'Stop losing patients to a confusing website';
 export const DESC_DENTAL = 'Turn your website into a high-performance booking machine in one week. No site rebuilds, no new software, and no copywriting required from you.';
 export const TITLE_SCRAAS = 'Business Data Collection & Enrichment';
