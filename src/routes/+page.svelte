@@ -5,7 +5,7 @@
   import line3Img from '$lib/assets/vector-line3.svg';
   import ogImg from '$lib/assets/og-image.png';
   import Footer from '$lib/components/Footer.svelte';
-  import { NAME, EMAIL, DOMAIN, TITLE, DESC, toggleModal, activeModal, submitAction, GSHEETS_ADS, GSHEETS_PARTNERS } from '$lib/index.js';
+  import { NAME, EMAIL, DOMAIN, toggleModal, activeModal, submitAction, GSHEETS_ADS, GSHEETS_PARTNERS, TITLE_SCRAAS, DESC_SCRAAS, GSHEETS_DENTAL } from '$lib/index.js';
   import { onMount } from 'svelte';
   import Modal from '$lib/components/Modal.svelte';
   import { on } from 'svelte/events';
@@ -22,7 +22,19 @@
     submitAction('', null, 'cold_email_refer', { action_details: ref });
   });
 
-  const targetBusinessTypes = ['Marketing Agencies', 'E-commerce Businesses'];
+  const targetBusinessTypes = [
+    // 'Marketing Agencies',
+    // 'E-commerce Businesses',
+    // 'Recruitment Firms',
+    // 'SaaS Companies',
+    // 'Financial Services',
+    // 'Enterprise Sales Teams',
+  'Dental Marketing Agencies',
+  'Dental Recruiters',
+  'Dental Software Companies',
+  'Dental Supply Companies',
+  'Private Equity Firms',
+  ];
   // const mainCtaText = 'See the Data You Need';
   // const mainCtaText = 'Get Metrics That Fuel Growth';
   const mainCtaText = 'What Data Do I Need';
@@ -120,20 +132,28 @@
 </script>
 
 <svelte:head>
-  <title>{TITLE}</title>
-  <meta name="description" content={DESC}>
+  <title>{TITLE_SCRAAS} | {NAME}</title>
+  <meta name="description" content={DESC_SCRAAS}>
 
-  <meta property="og:title" content={TITLE}>
-  <meta property="og:description" content={DESC}>
+  <meta property="og:title" content={TITLE_SCRAAS}>
+  <meta property="og:description" content={DESC_SCRAAS}>
   <meta property="og:url" content="https://{DOMAIN}/">
   <meta property="og:image" content={ogImg}>
   
-  <meta name="twitter:title" content={TITLE}>
-  <meta name="twitter:description" content={DESC}>
+  <meta name="twitter:title" content={TITLE_SCRAAS}>
+  <meta name="twitter:description" content={DESC_SCRAAS}>
   <meta name="twitter:image" content={ogImg}>
 </svelte:head>
 
 <img src="{line1Img}" alt="line" class="w-full absolute top-18 left-0 z-0 select-none opacity-10" draggable="false" />
+<div class="py-2 bg-green-500">
+  <div class="layout-wrapper">
+    <p class="text-gray-700! max-w-none!">
+      <b class="text-gray-700! font-semibold">New:</b> 12,000+ UK dental practices, enriched and ready to export.
+      <a href={GSHEETS_DENTAL} target="_blank" class="text-gray-700! underline">See sample</a>
+    </p>
+  </div>
+</div>
 <Nav />
 
 <!-- hero -->
@@ -142,15 +162,16 @@
     <div>
       <div class="flex gap-x-4 flex-col items-center">
         <h1 class="text-center hero-title text-t-secondary!">
-            Data 
+            Data
             <span class="text-h1! not-sm:text-h1-mobile! font-main! hero-hlight" class:hlighted={heroHlighted === 1}>
               Collection 
             </span>
             <i class="fa-solid fa-magnifying-glass-chart"></i> &
             <span class="text-h1! not-sm:text-h1-mobile! font-main! hero-hlight" class:hlighted={heroHlighted === 2}>
-              Automation 
+              Enrichment 
             </span>
-            <i class="fa-solid fa-circle-play"></i> 
+            <!-- <i class="fa-solid fa-circle-play"></i>  -->
+            <i class="fa-solid fa-circle-plus"></i>
             for
           <span class="block gradient-text font-main! pb-5 text-h1! not-sm:text-h1-mobile! -z-10 relative font-normal!"
           bind:this={heroRotator}></span>
@@ -158,7 +179,8 @@
         <p class="text-center mt-2!">
           <!-- Save time, gain insights, and make smarter decisions with automated data collection
           tailored to your business. -->
-          Custom-built data collection that gives your business the information it needs without the manual work.
+          <!-- Custom-built data collection that gives your business the information it needs without the manual work. -->
+          {DESC_SCRAAS}
         </p>
         <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-8">
           <a href="#quiz" class="brand-btn not-sm:block! not-sm:w-full!">

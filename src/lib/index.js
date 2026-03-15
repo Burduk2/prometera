@@ -1,13 +1,16 @@
 import { writable } from "svelte/store";
 
-export const TITLE = 'Stop losing patients to a confusing website';
-export const DESC = 'Turn your website into a high-performance booking machine in one week. No site rebuilds, no new software, and no copywriting required from you.';
+export const TITLE_DENTAL = 'Stop losing patients to a confusing website';
+export const DESC_DENTAL = 'Turn your website into a high-performance booking machine in one week. No site rebuilds, no new software, and no copywriting required from you.';
+export const TITLE_SCRAAS = 'Business Data Collection & Enrichment';
+export const DESC_SCRAAS = 'We build and enrich business databases with the contact details, digital signals, and decision maker info you need.';
 export const DOMAIN = 'prometera.com';
 export const EMAIL = 'artem@prometera.com';
 export const NAME = 'Prometera';
 export const GSHEETS_ADS = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=1387262382#gid=1387262382';
 export const GSHEETS_PARTNERS = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=1867109596#gid=1867109596';
 export const GSHEETS_STORES = 'https://docs.google.com/spreadsheets/d/1P_D7cK3EjivsLn2PoUaW9drW1ik0gxxoGgCOInIyg5Y/edit?gid=155050562#gid=155050562';
+export const GSHEETS_DENTAL = 'https://docs.google.com/spreadsheets/d/1tXqUejxwui1NujVtSk_oTKob3onCeLmeqQFcYdHmD18/edit?gid=0#gid=0';
 export const DOWNLOAD_URL = '/files/uk_shopify_leads_sample.zip';
 
 export function inView(node, { onEnter, threshold = 0.3 } = {}) {
