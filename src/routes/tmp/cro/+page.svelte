@@ -11,7 +11,7 @@
   import { on } from 'svelte/events';
   import { fade } from 'svelte/transition';
   import EmailForm from '$lib/components/EmailForm.svelte';
-  import Nav from '$lib/components/SimpleNav.svelte';
+  import Nav from '$lib/components/FullNav.svelte';
 
   onMount(() => {
     const ref = new URLSearchParams(window.location.search)?.get('ref') || '';
@@ -22,11 +22,10 @@
     submitAction('', null, 'cold_email_refer', { action_details: ref });
   });
 
-  const targetBusinessTypes = ['Marketing Agencies', 'E-commerce Businesses'];
-  // const mainCtaText = 'See the Data You Need';
-  // const mainCtaText = 'Get Metrics That Fuel Growth';
-  const mainCtaText = 'What Data Do I Need';
-  const secondaryCtaText = 'Start a Project';
+  const targetBusinessTypes = ['CRO Agencies', 'CRO Specialists'];
+
+  const primaryCtaText = 'Get 24 Leads in 24h';
+  const secondaryCtaText = 'Book a Demo';
 
   let heroRotator;
   let heroHlighted = 1;
@@ -142,27 +141,24 @@
     <div>
       <div class="flex gap-x-4 flex-col items-center">
         <h1 class="text-center hero-title text-t-secondary!">
-            Data 
+            <!-- Qualified
             <span class="text-h1! not-sm:text-h1-mobile! font-main! hero-hlight" class:hlighted={heroHlighted === 1}>
-              Collection 
+              CRO Opportunities
             </span>
-            <i class="fa-solid fa-magnifying-glass-chart"></i> &
-            <span class="text-h1! not-sm:text-h1-mobile! font-main! hero-hlight" class:hlighted={heroHlighted === 2}>
-              Automation 
-            </span>
-            <i class="fa-solid fa-circle-play"></i> 
-            for
-          <span class="block gradient-text font-main! pb-5 text-h1! not-sm:text-h1-mobile! -z-10 relative font-normal!"
-          bind:this={heroRotator}></span>
+            <i class="fa-solid fa-magnifying-glass-chart"></i> -->
+            <!-- for -->
+            Secure your next high-value CRO project,
+            <br>
+            without guesswork
+          <!-- <span class="block gradient-text font-main! pb-5 text-h1! not-sm:text-h1-mobile! -z-10 relative font-normal!"
+          bind:this={heroRotator}></span> -->
         </h1>
         <p class="text-center mt-2!">
-          <!-- Save time, gain insights, and make smarter decisions with automated data collection
-          tailored to your business. -->
-          Custom-built data collection that gives your business the information it needs without the manual work.
+          Delivering high-value leads that have CRO gaps you can act on.
         </p>
         <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-8">
           <a href="#quiz" class="brand-btn not-sm:block! not-sm:w-full!">
-            {mainCtaText} <i class="fas fa-arrow-right"></i>
+            {primaryCtaText} <i class="fas fa-arrow-right"></i>
           </a>
           <a href="#contact" class="secondary-btn not-sm:block! not-sm:w-full!">{secondaryCtaText}</a>
         </div>
@@ -193,7 +189,7 @@
         title: 'Custom & Flexible',
         text: 'Data collection tailored to your niche and needs, ready for analysis or system integration.',
         icon: 'fas fa-gears',
-        cta: { text: mainCtaText, href: '#quiz' },
+        cta: { text: primaryCtaText, href: '#quiz' },
       }, {
         title: 'Satisfaction Guaranteed',
         text: "Didn't find the data useful? You don't pay.",
@@ -301,7 +297,7 @@
         </div>
         <hr>
         <div>
-          <a href="#quiz" class="brand-btn">{mainCtaText} <i class="fas fa-arrow-right"></i></a>
+          <a href="#quiz" class="brand-btn">{primaryCtaText} <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
     {/each}
