@@ -183,10 +183,12 @@
           {DESC_SCRAAS}
         </p>
         <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-8">
-          <a href="#quiz" class="brand-btn not-sm:block! not-sm:w-full!">
+          <button class="brand-btn not-sm:block! not-sm:w-full!" on:click={() => toggleModal('quiz')}>
             {mainCtaText} <i class="fas fa-arrow-right"></i>
-          </a>
-          <a href="#contact" class="secondary-btn not-sm:block! not-sm:w-full!">{secondaryCtaText}</a>
+          </button>
+          <button class="secondary-btn not-sm:block! not-sm:w-full!" on:click={() => toggleModal('contact')}>
+            {secondaryCtaText}
+          </button>
         </div>
       </div>
     </div>
@@ -210,17 +212,17 @@
         title: 'Public & Compliant Only',
         text: 'We use exclusively publicly available business data — never private or sensitive information.',
         icon: 'fa-solid fa-circle-check',
-        cta: { text: 'See Example Datasets', href: '#demos' },
+        a: { text: 'See Example Datasets', href: '#demos' },
       }, {
         title: 'Custom & Flexible',
         text: 'Data collection tailored to your niche and needs, ready for analysis or system integration.',
         icon: 'fas fa-gears',
-        cta: { text: mainCtaText, href: '#quiz' },
+        btn: { text: mainCtaText, onclick: () => toggleModal('quiz') },
       }, {
         title: 'Satisfaction Guaranteed',
         text: "Didn't find the data useful? You don't pay.",
         icon: 'fas fa-medal',
-        cta: { text: secondaryCtaText, href: '#contact' },
+        btn: { text: secondaryCtaText, onclick: () => toggleModal('contact') },
       },
 
     ] as item}
@@ -230,7 +232,11 @@
           <p class="font-medium text-h4! text-t-primary!">{item.title}</p>
           <p class="mt-2">{item.text}</p>
         </div>
-        <a href={item.cta.href} class="secondary-btn block mt-4">{item.cta.text}</a>
+        {#if item.btn}
+          <button class="secondary-btn block mt-4" on:click={item.btn.onclick}>{item.btn.text}</button>
+        {:else}
+          <a href={item.a.href} class="secondary-btn block mt-4">{item.a.text}</a>
+        {/if}
       </div>
     {/each}
   </div>
@@ -323,7 +329,9 @@
         </div>
         <hr>
         <div>
-          <a href="#quiz" class="brand-btn">{mainCtaText} <i class="fas fa-arrow-right"></i></a>
+          <button class="brand-btn" on:click={() => toggleModal('quiz')}>
+            {mainCtaText} <i class="fas fa-arrow-right"></i>
+          </button>
         </div>
       </div>
     {/each}
