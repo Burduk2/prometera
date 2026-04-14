@@ -514,7 +514,7 @@
     <div>
       <label for="budget-inp">Budget *</label>
       <div class="flex gap-x-2 items-center input">
-        <p class="w-[10ch] font-medium">{['<$200', '$200-$500', '$500-$1500', '>$1500'][projectBudget]}</p>
+        <p class="w-[13ch] font-medium">{['<$1500', '$1500-$4000', '$4000-$10000', '>$10000'][projectBudget]}</p>
         <input class="flex-1 p-0!" id="budget-inp" name="budget" type="range" min="0" max="3" step="1" required bind:value={projectBudget}>
       </div>
     </div>
