@@ -167,7 +167,7 @@
         <h1 class="text-center hero-title text-t-secondary!">
           Building 
           <span class="gradient-text font-main! pb-5 text-h1! not-sm:text-h1-mobile! -z-10 relative font-normal!" >
-            outbound account datasets 
+            company datasets
           </span>
           for teams that already know how to sell
         </h1>
