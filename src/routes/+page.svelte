@@ -63,6 +63,7 @@
   });
 
 
+  let showAllSamples = false;
   let selectedSample = { url: '', title: ''};
   let sampleFormSubmitted;
 
@@ -146,14 +147,16 @@
 </svelte:head>
 
 <img src="{line1Img}" alt="line" class="w-full absolute top-18 left-0 z-0 select-none opacity-10" draggable="false" />
-<div class="py-2 bg-green-500">
-  <div class="layout-wrapper">
-    <p class="text-gray-700! max-w-none!">
-      <b class="text-gray-700! font-semibold">New:</b> 12,000+ UK dental practices, enriched and ready to export.
-      <a href={GSHEETS_DENTAL} target="_blank" class="text-gray-700! underline">See sample</a>
-    </p>
-  </div>
-</div>
+
+<!-- top alert -->
+<!-- <div class="py-2 bg-green-500"> -->
+<!--   <div class="layout-wrapper"> -->
+<!--     <p class="text-gray-700! max-w-none!"> -->
+<!--       <b class="text-gray-700! font-semibold">New:</b> 12,000+ UK dental practices, enriched and ready to export. -->
+<!--       <a href={GSHEETS_DENTAL} target="_blank" class="text-gray-700! underline">See sample</a> -->
+<!--     </p> -->
+<!--   </div> -->
+<!-- </div> -->
 <Nav />
 
 <!-- hero -->
@@ -162,24 +165,13 @@
     <div>
       <div class="flex gap-x-4 flex-col items-center">
         <h1 class="text-center hero-title text-t-secondary!">
-            Data
-            <span class="text-h1! not-sm:text-h1-mobile! font-main! hero-hlight" class:hlighted={heroHlighted === 1}>
-              Collection 
-            </span>
-            <i class="fa-solid fa-magnifying-glass-chart"></i> &
-            <span class="text-h1! not-sm:text-h1-mobile! font-main! hero-hlight" class:hlighted={heroHlighted === 2}>
-              Enrichment 
-            </span>
-            <!-- <i class="fa-solid fa-circle-play"></i>  -->
-            <i class="fa-solid fa-circle-plus"></i>
-            for
-          <span class="block gradient-text font-main! pb-5 text-h1! not-sm:text-h1-mobile! -z-10 relative font-normal!"
-          bind:this={heroRotator}></span>
+          Building 
+          <span class="gradient-text font-main! pb-5 text-h1! not-sm:text-h1-mobile! -z-10 relative font-normal!" >
+            outbound account datasets 
+          </span>
+          for teams that already know how to sell
         </h1>
         <p class="text-center mt-2!">
-          <!-- Save time, gain insights, and make smarter decisions with automated data collection
-          tailored to your business. -->
-          <!-- Custom-built data collection that gives your business the information it needs without the manual work. -->
           {DESC_SCRAAS}
         </p>
         <div class="cta-container flex gap-x-3 gap-y-2 flex-wrap mt-8">
@@ -250,6 +242,31 @@
   <div class="mt-8 grid grid-cols-2 gap-x-6 not-md:grid-cols-1 gap-y-10">
     {#each [
       {
+        title: 'UK Dental Clinics Growth & Outreach Dataset',
+        objective: [
+          'Identify UK dental clinics with active patient acquisition signals',
+          'Map decision-makers for direct outreach',
+          'Assess digital marketing and ad activity',
+          'Remove manual research across fragmented sources',
+        ],
+        solution: [
+          'Clinic name, website, address, city',
+          'Email and phone contact data',
+          'Ownership type (franchise vs independent)',
+          'Decision maker + officer count',
+          'Meta ad activity (number of ads)',
+          'Facebook + Instagram profiles and engagement metrics',
+          'Website performance (mobile + desktop scores)',
+        ],
+        sample_url: GSHEETS_DENTAL,
+        sample_title: 'UK Dental Clinics Dataset',
+        outcome: [
+          'Faster targeting of high-intent clinics',
+          'Clear decision-maker visibility',
+          'Prioritization based on marketing activity',
+          'Less manual research, faster outreach',
+        ],
+      }, {
         title: 'Competitor Ad Activity Insights',
         objective: [
           'Identify e-commerce stores actively running Meta ads',
@@ -295,7 +312,7 @@
         ],
       },
     ] as demo, i}
-      <div class="case-study-card brand-box py-7 flex flex-col gap-y-6 h-fit">
+      <div class="case-study-card brand-box py-7 flex flex-col gap-y-6 h-fit {i > 1 && !showAllSamples ? 'hidden' : ''}">
         <div>
           <h3>0{i + 1} / {demo.title}</h3>
         </div>
@@ -336,6 +353,9 @@
       </div>
     {/each}
   </div>
+  <button class="secondary-btn mt-10 block m-auto w-50!" on:click={() => showAllSamples = !showAllSamples}>
+    {showAllSamples ? 'Show Less' : 'Show More'} 
+  </button>
 </section>
 <Modal name="sample">
   <EmailForm title="Enter your email to access the sample" cta="Access the Sample"
@@ -366,7 +386,7 @@
         text: 'Tell us your business focus and we’ll recommend the most valuable metrics to obtain'
       }, {
         title: 'Wait for delivery',
-        text: 'We collect, clean, and structure the data — ready within 24–48 hours',
+        text: 'We collect, clean, and structure the data',
       }, {
         title: 'Use it immediately',
         text: 'Available in CSV/JSON/Excel, ready to integrate into your systems',

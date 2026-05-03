@@ -4,8 +4,8 @@ export const TITLE = 'Prometera'; // defaults
 export const DESC = ''; // defaults
 export const TITLE_DENTAL = 'Stop losing patients to a confusing website';
 export const DESC_DENTAL = 'Turn your website into a high-performance booking machine in one week. No site rebuilds, no new software, and no copywriting required from you.';
-export const TITLE_SCRAAS = 'Business Data Collection & Enrichment';
-export const DESC_SCRAAS = 'We build and enrich business databases with the contact details, digital signals, and decision maker info you need.';
+export const TITLE_SCRAAS = 'Custom outbound account datasets';
+export const DESC_SCRAAS = 'Building custom outbound-ready company datasets tailored to your ICP, niche, geography, and signals.';
 export const DOMAIN = 'prometera.com';
 export const EMAIL = 'artem@prometera.com';
 export const NAME = 'Prometera';
@@ -38,7 +38,7 @@ export function inView(node, { onEnter, threshold = 0.3 } = {}) {
 
 
 export let activeModal = writable(null);
-export function toggleModal(name=null) {
+export function toggleModal(name = null) {
   activeModal.set(name);
   document.body.classList[name ? 'add' : 'remove']('overflow-hidden');
 }
